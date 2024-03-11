@@ -14,17 +14,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
-}
 
 // Necessary for Next auth
 model Account {
@@ -61,7 +50,6 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
 }
 
 model VerificationToken {
@@ -70,4 +58,35 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String   
+  description String?
+  price       Decimal
+  quantity    Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  Int
+  actions     ActionHistory[]
+}
+
+model Category {
+  id       Int       @id @default(autoincrement()) 
+  name     String
+  products Product[]
+}
+
+model ActionHistory {
+  id         Int      @id @default(autoincrement())
+  type       ActionType
+  quantity   Int
+  date       DateTime @default(now())
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  Int
+}
+
+enum ActionType {
+  IN
+  OUT
 }
