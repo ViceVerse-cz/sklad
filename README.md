@@ -1,3 +1,6 @@
+Figma: https://www.figma.com/file/Xl9Pe0Co4NcFVDNfTJz5mq/sklad?type=design&node-id=0%3A1&mode=design&t=KAnGAHWpEN0v4s6w-1
+
+
 # Create T3 App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
