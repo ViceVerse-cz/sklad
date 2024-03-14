@@ -9,6 +9,11 @@ export const stockProducts = protectedProcedure
       data: {
         type: input.type,
         quantity: input.quantity,
+        product: {
+          connect: {
+            id: input.id
+          }
+        }
       },
     });
 
