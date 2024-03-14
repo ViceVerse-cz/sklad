@@ -1,12 +1,8 @@
 import { protectedProcedure } from "@/server/api/trpc";
-import { z } from "zod";
+import { createCategorySchema } from "../schema";
 
 export const createCategory = protectedProcedure
-  .input(
-    z.object({
-      name: z.string().min(1),
-    }),
-  )
+  .input(createCategorySchema)
   .mutation(async () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 

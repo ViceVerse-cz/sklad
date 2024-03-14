@@ -1,11 +1,6 @@
 import { protectedProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
-import { z } from "zod";
-
-const addProductSchema = z.object({
-  categoryId: z.number(),
-  productIds: z.array(z.number()),
-});
+import { addProductSchema } from "../schema";
 
 export const addProduct = protectedProcedure
   .input(addProductSchema)

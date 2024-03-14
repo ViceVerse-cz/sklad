@@ -1,9 +1,9 @@
 import { protectedProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
-import { z } from "zod";
+import { deleteCategoriesSchema } from "../schema";
 
 export const deleteCategories = protectedProcedure
-  .input(z.array(z.number()))
+  .input(deleteCategoriesSchema)
   .mutation(({ input }) => {
     return db.category.deleteMany({
       where: {
