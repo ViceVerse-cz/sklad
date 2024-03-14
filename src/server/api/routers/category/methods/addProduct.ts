@@ -4,17 +4,13 @@ import { addProductSchema } from "../schema";
 
 export const addProduct = protectedProcedure
   .input(addProductSchema)
-  .mutation(({ input }) => {
-    db.category.update({
-      where: {
-        id: input.categoryId,
-      },
-      data: {
-        products: {
-          connect: input.productIds.map((id) => ({
-            id,
-          })),
-        },
-      },
+  .mutation(async ({ input }) => {
+    const productCategories = input.productIds.map((productId) => ({
+      productId,
+      categoryId: input.categoryId,
+    }));
+
+    await db.productCategory.createMany({
+      data: productCategories,
     });
   });

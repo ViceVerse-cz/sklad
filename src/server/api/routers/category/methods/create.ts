@@ -5,14 +5,20 @@ import { db } from "@/server/db";
 export const createCategory = protectedProcedure
   .input(createCategorySchema)
   .mutation(async ({ input }) => {
-    return db.category.create({
+    const category = await db.category.create({
       data: {
         name: input.name,
-        products: {
-          connect: input.productIds.map((id) => ({
-            id: id,
-          })),
-        },
       },
     });
+
+    const productCategories = input.productIds.map((productId) => ({
+      productId,
+      categoryId: category.id,
+    }));
+
+    await db.productCategory.createMany({
+      data: productCategories,
+    });
+
+    return category;
   });

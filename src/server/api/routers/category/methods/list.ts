@@ -8,10 +8,34 @@ const paginate = createPaginator({ perPage: 10 });
 
 export const listCategories = protectedProcedure
   .input(listCategoriesInput)
-  .query(({ input }) => {
-    return paginate<Category, Prisma.UserFindManyArgs>(
-      db.category,
+  .query(async ({ input }) => {
+    const categories = await paginate<Category, Prisma.UserFindManyArgs>(
+      db.category.findMany,
       {},
       { page: input.page },
     );
+
+    const productCategories = await db.productCategory.findMany({
+      where: {
+        categoryId: {
+          in: categories.data.map((category) => category.id),
+        },
+      },
+    });
+
+    const categoryProductCount = categories.data.map((category) => {
+      const productCount = productCategories.filter(
+        (productCategory) => productCategory.categoryId === category.id,
+      ).length;
+
+      return {
+        ...category,
+        productCount,
+      };
+    });
+
+    return {
+      ...categories,
+      data: categoryProductCount,
+    };
   });
