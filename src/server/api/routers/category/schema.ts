@@ -7,6 +7,11 @@ export const addProductSchema = z.object({
 
 export const createCategorySchema = z.object({
   name: z.string().min(1),
+  productIds: z.array(z.number()).default([]),
 });
 
 export const deleteCategoriesSchema = z.array(z.number());
+
+export const listCategoriesInput = z.object({
+  page: z.number().min(1),
+});

@@ -16,3 +16,5 @@ export const stockProductsSchema = z.object({
   quantity: z.number().min(1),
   type: z.nativeEnum(ActionType),
 });
+
+export const listAllQueryInput = z.number().min(1);
