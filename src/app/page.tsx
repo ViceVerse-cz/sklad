@@ -1,10 +1,12 @@
 import { unstable_noStore as noStore } from "next/cache";
-import { Button } from "@/components/ui/button"
-import { Carousel,
+import { Button } from "@/components/ui/button";
+import {
+  Carousel,
   CarouselContent,
   CarouselItem,
   CarouselPrevious,
-  CarouselNext, } from "@/components/ui/carousel"
+  CarouselNext,
+} from "@/components/ui/carousel";
 import Link from "next/link";
 
 import { getServerAuthSession } from "@/server/auth";
@@ -44,20 +46,20 @@ export default async function Home() {
           </Link>
         </div>
         <Carousel>
-      <CarouselContent>
-        <CarouselItem>
-          <div className="h-64 bg-gray-300">Slide 1</div>
-        </CarouselItem>
-        <CarouselItem>
-          <div className="h-64 bg-gray-400">Slide 2</div>
-        </CarouselItem>
-        <CarouselItem>
-          <div className="h-64 bg-gray-500">Slide 3</div>
-        </CarouselItem>
-      </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
-    </Carousel>
+          <CarouselContent>
+            <CarouselItem>
+              <div className="h-64 bg-gray-300">Slide 1</div>
+            </CarouselItem>
+            <CarouselItem>
+              <div className="h-64 bg-gray-400">Slide 2</div>
+            </CarouselItem>
+            <CarouselItem>
+              <div className="h-64 bg-gray-500">Slide 3</div>
+            </CarouselItem>
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
         <div className="flex flex-col items-center gap-2">
           <div className="flex flex-col items-center justify-center gap-4">
             <p className="text-center text-2xl text-white">
