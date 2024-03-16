@@ -15,12 +15,12 @@ export function MainNav({
       >
         <Link
           href="/overview"
-          className="text-sm font-medium hover:text-primary"
+          className="text-sm font-medium text-muted-foreground hover:text-primary"
         >
           Přehled
         </Link>
         <Link
-          href="/settings"
+          href="/products"
           className="text-sm font-medium text-muted-foreground hover:text-primary"
         >
           Tabulka produktů
