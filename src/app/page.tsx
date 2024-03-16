@@ -18,25 +18,21 @@ import { MainNav } from "@/app/_components/dashboard/main-nav";
 import { Overview } from "@/app/_components/dashboard/overview";
 import { RecentSales } from "@/app/_components/dashboard/recent-sales";
 import { api } from "@/trpc/server";
-import { MdOutlineCategory } from "react-icons/md";
-import { Decimal } from "@prisma/client/runtime/library";
+import { RxCross1 } from "react-icons/rx";
 
 export const metadata: Metadata = {
   title: "Dashboard",
   description: "Dashboard",
 };
 
-interface Product {
-  id: number;
-  name: string;
-  description: string | null;
-  price: Decimal;
-  quantity: number;
+interface Category {
+  productCount: number;
+    id: number;
+    name: string;
 }
 
 export default async function DashboardPage() {
   const categories = await api.category.listCategories.query();
-
   return (
     <>
       <div className="md:hidden" />
@@ -49,26 +45,26 @@ export default async function DashboardPage() {
         </div>
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight">Kategorie</h2>
+            <h2 className="text-3xl font-bold tracking-tight">Přehled</h2>
           </div>
           <Tabs defaultValue="overview" className="space-y-4">
             <TabsContent value="overview" className="space-y-4">
               <Carousel className="w-full">
                 <CarouselContent>
-                  {categories?.map(() => (
+                  {categories?.map((item: Category) => (
                     <>
                       <CarouselItem>
                         <Card>
                           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">
-                              Total Revenue
+                              Kategorie
                             </CardTitle>
-                            <MdOutlineCategory />
+                            <RxCross1/>
                           </CardHeader>
                           <CardContent>
-                            <div className="text-2xl font-bold">Joe</div>
+                            <div className="text-2xl font-bold">{item.name}</div>
                             <p className="text-xs text-muted-foreground">
-                              +20.1% from last month
+                              Počet produktů: {item.productCount}
                             </p>
                           </CardContent>
                         </Card>
@@ -90,9 +86,9 @@ export default async function DashboardPage() {
                 </Card>
                 <Card className="col-span-3">
                   <CardHeader>
-                    <CardTitle>Recent Sales</CardTitle>
+                    <CardTitle>Poslední akce</CardTitle>
                     <CardDescription>
-                      You made 265 sales this month.
+                      
                     </CardDescription>
                   </CardHeader>
                   <CardContent>

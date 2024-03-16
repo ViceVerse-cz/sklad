@@ -3,7 +3,7 @@ import { db } from "@/server/db";
 import { createPaginator } from "prisma-pagination";
 import { listAllActionsInput } from "../schema";
 
-const paginate = createPaginator({ perPage: 7 });
+const paginate = createPaginator({ perPage: 5 });
 
 export const listLastActions = protectedProcedure
   .input(listAllActionsInput)
@@ -12,8 +12,11 @@ export const listLastActions = protectedProcedure
       db.actionHistory,
       {
         orderBy: {
-          createdAt: "desc",
+          date: "desc",
         },
+        include: {
+          product: true,
+        }
       },
       { page: input.page },
     );
