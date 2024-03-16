@@ -1,12 +1,13 @@
 import "@/styles/globals.css";
-import { Inter as FontSans } from "next/font/google"
+import { Inter as FontSans } from "next/font/google";
 import { TRPCReactProvider } from "@/trpc/react";
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
+import { MainNav } from "./_components/dashboard/MainNav";
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
-})
+});
 
 export const metadata = {
   title: "Create T3 App",
@@ -21,10 +22,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
-        )}>
+      <body
+        className={cn(
+          "min-h-screen bg-background p-8 pt-6 font-sans antialiased",
+          fontSans.variable,
+        )}
+      >
+        <MainNav />
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
