@@ -8,10 +8,14 @@ import {
 import { RecentSales } from "../_components/dashboard/RecentSales";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Overview } from "../_components/dashboard/Overview";
+import { Stats } from "../_components/dashboard/Stats";
 
 export default async () => {
   return (
-    <Tabs defaultValue="overview" className="space-y-4">
+    <Tabs defaultValue="overview" className="mt-4 h-full space-y-4">
+      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <Overview />
+
       <TabsContent value="overview" className="space-y-4">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
           <Card className="col-span-4">
@@ -19,7 +23,7 @@ export default async () => {
               <CardTitle>Overview</CardTitle>
             </CardHeader>
             <CardContent className="pl-2">
-              <Overview />
+              <Stats />
             </CardContent>
           </Card>
           <Card className="col-span-3">
