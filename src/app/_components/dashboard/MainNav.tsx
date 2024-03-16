@@ -23,7 +23,7 @@ export function MainNav({
           href="/settings"
           className="text-sm font-medium text-muted-foreground hover:text-primary"
         >
-          Nastavení
+          Tabulka produktů
         </Link>
       </nav>
 
