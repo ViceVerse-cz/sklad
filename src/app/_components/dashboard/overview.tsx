@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Carousel,
@@ -14,6 +15,8 @@ export const Overview = async () => {
 
   return (
     <Carousel className="w-full">
+      <Button>Vytvořit kategorii</Button>
+
       <CarouselContent>
         {categories.map((item) => (
           <>

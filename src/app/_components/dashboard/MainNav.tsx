@@ -15,21 +15,15 @@ export function MainNav({
       >
         <Link
           href="/overview"
-          className="text-sm font-medium transition-colors hover:text-primary"
+          className="text-sm font-medium hover:text-primary"
         >
           Přehled
         </Link>
         <Link
-          href="/categories"
-          className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+          href="/settings"
+          className="text-sm font-medium text-muted-foreground hover:text-primary"
         >
-          Kategorie
-        </Link>
-        <Link
-          href="/products"
-          className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-        >
-          Produkty
+          Nastavení
         </Link>
       </nav>
 
