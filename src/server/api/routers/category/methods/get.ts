@@ -14,16 +14,42 @@ export const getCategory = protectedProcedure
       },
     });
 
+    const productActions = await db.actionHistory.findMany({
+      where: {
+        productId: {
+          in: productCategories.map(
+            (productCategory) => productCategory.productId,
+          ),
+        },
+      },
+    });
+
     const category = await db.category.findFirst({
       where: {
         id: input,
       },
     });
 
+    const productsCounted = productCategories.map((productCategory) => {
+      const actions = productActions
+        .filter(
+          (productAction) =>
+            productAction.productId === productCategory.productId,
+        )
+        .filter((item) => item.type === "SOLD");
+
+      return {
+        ...productCategory.product,
+        soldCount: actions.reduce((acc, action) => acc + action.quantity, 0),
+        soldPrice:
+          // TODO: Each action needs to have the prices saved with it, this will cause bugs
+          actions.reduce((acc, action) => acc + action.quantity, 0) *
+          Number(productCategory.product.price),
+      };
+    });
+
     return {
       category: category,
-      products: productCategories.map(
-        (productCategory) => productCategory.product,
-      ),
+      products: productsCounted,
     };
   });

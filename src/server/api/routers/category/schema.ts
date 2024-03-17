@@ -13,3 +13,5 @@ export const createCategorySchema = z.object({
 export const deleteCategoriesSchema = z.array(z.number());
 
 export const getCategorySchema = z.number();
+
+export const getCategoryStatsSchema = z.number();
