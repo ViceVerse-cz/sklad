@@ -5,11 +5,9 @@ import { deleteCategoriesSchema } from "../schema";
 export const deleteCategories = protectedProcedure
   .input(deleteCategoriesSchema)
   .mutation(({ input }) => {
-    return db.category.deleteMany({
+    return db.category.delete({
       where: {
-        id: {
-          in: input,
-        },
+        id: input,
       },
     });
   });
