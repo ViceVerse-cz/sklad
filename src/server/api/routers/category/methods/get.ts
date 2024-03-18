@@ -50,6 +50,7 @@ export const getCategory = protectedProcedure
       };
     });
 
+    // Return everuything
     return {
       category: category,
       products: productsCounted,
