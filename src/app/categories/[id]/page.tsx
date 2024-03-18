@@ -17,6 +17,8 @@ export default async function Page({ params }: { params: { id: string } }) {
   const { totalProducts, totalSales, totalRestock } =
     await api.category.getStats.query(parseInt(params.id, 10));
 
+  await api.product.getMonths.query();
+
   return (
     <div className="space-y-8">
       <h1 className="text-4xl font-bold">{category?.name}</h1>
@@ -101,7 +103,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         </Card>
       </div>
 
-      <h2 className="font-semibold text-xl">Produkty</h2>
+      <h2 className="text-xl font-semibold">Produkty</h2>
       <Table>
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>

@@ -158,6 +158,7 @@ async function main() {
       data: {
         type: 'SOLD',
         quantity: 20,
+        price: 1499.99,
         product: {
           connect: {
             id: products[1].id,
@@ -169,6 +170,7 @@ async function main() {
       data: {
         type: 'RESTOCK',
         quantity: 50,
+        price: 1000,
         product: {
           connect: {
             id: products[2].id,
@@ -180,6 +182,7 @@ async function main() {
       data: {
         type: 'SOLD',
         quantity: 30,
+        price: 1200,
         product: {
           connect: {
             id: products[3].id,
@@ -202,6 +205,7 @@ async function main() {
       data: {
         type: 'SOLD',
         quantity: 15,
+        price: 500,
         product: {
           connect: {
             id: products[5].id,
@@ -224,6 +228,7 @@ async function main() {
       data: {
         type: 'SOLD',
         quantity: 10,
+        price: 250,
         product: {
           connect: {
             id: products[0].id,
