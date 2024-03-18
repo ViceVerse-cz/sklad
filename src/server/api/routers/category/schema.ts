@@ -10,7 +10,7 @@ export const createCategorySchema = z.object({
   productIds: z.array(z.number()).default([]),
 });
 
-export const deleteCategoriesSchema = z.array(z.number());
+export const deleteCategoriesSchema = z.number();
 
 export const getCategorySchema = z.number();
 

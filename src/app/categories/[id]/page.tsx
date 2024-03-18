@@ -18,10 +18,8 @@ export default async function Page({ params }: { params: { id: string } }) {
     await api.category.getStats.query(parseInt(params.id, 10));
 
   return (
-    <div>
-      <h1 className="mb-6 mt-3 text-4xl font-bold">
-        Kategorie {category?.name}
-      </h1>
+    <div className="space-y-8">
+      <h1 className="text-4xl font-bold">{category?.name}</h1>
 
       <div className="grid grid-cols-3 gap-6">
         <Card>
@@ -103,7 +101,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         </Card>
       </div>
 
-      <h1 className="mb-6 mt-6 text-2xl font-bold">Produkty</h1>
+      <h2 className="font-semibold text-xl">Produkty</h2>
       <Table>
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>

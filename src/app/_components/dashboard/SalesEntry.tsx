@@ -53,7 +53,7 @@ export async function SalesEntry({ actions }: { actions: ActionHistory[] }) {
               {item.product.description || "Neznámý produkt"}
             </p>
             <p className="text-sm text-muted-foreground">
-              {item.type === "RESTOCK" ? "Doplněno" : "Prodáno"}
+              {item.type === "RESTOCK" ? `Doplněno dne ${item.date.getDate()}/${item.date.getMonth() + 1}/${item.date.getFullYear()}` : `Prodáno dne ${item.date.getDate()}/${item.date.getMonth() + 1  }/${item.date.getFullYear()}`} 
             </p>
           </div>
           <div className="ml-auto font-medium">{item.quantity}</div>

@@ -8,7 +8,7 @@ import {
 import { RecentSales } from "../_components/dashboard/RecentSales";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Overview } from "../_components/dashboard/Overview";
-import { Stats } from "../_components/dashboard/Stats";
+import { Stats } from "../_components/dashboard/Stats"
 
 export default async () => {
   return (
