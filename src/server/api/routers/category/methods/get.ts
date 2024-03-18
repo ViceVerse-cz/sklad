@@ -43,8 +43,10 @@ export const getCategory = protectedProcedure
         soldCount: actions.reduce((acc, action) => acc + action.quantity, 0),
         soldPrice:
           // TODO: Each action needs to have the prices saved with it, this will cause bugs
-          actions.reduce((acc, action) => acc + action.quantity, 0) *
-          Number(productCategory.product.price),
+          actions.reduce(
+            (acc, action) => acc + action.quantity * Number(action.price),
+            0,
+          ),
       };
     });
 

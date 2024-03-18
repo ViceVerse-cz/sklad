@@ -80,6 +80,7 @@ model ActionHistory {
   id         Int      @id @default(autoincrement())
   type       ActionType
   quantity   Int
+  price      Int?
   date       DateTime @default(now())
   product    Product  @relation(fields: [productId], references: [id])
   productId  Int
