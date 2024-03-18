@@ -6,7 +6,7 @@ async function main() {
   const user = await prisma.user.create({
     data: {
       name: 'John Pork',
-      email: 'michal.hrbacek@albert.einstein',
+      email: 'michal.hrbacek@albert.einstein.epstein',
       emailVerified: new Date(),
       image: 'http://example.com/image.jpg',
     },
@@ -152,6 +152,7 @@ async function main() {
             id: products[0].id,
           },
         },
+        date: "2024-02-14T22:17:28.861Z"
       },
     }),
     prisma.actionHistory.create({

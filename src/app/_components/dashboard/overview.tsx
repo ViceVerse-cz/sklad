@@ -86,7 +86,7 @@ const MenuButton = ({ item, deleteCategory }) => {
       {isOpen && (
         <div
           ref={menuRef}
-          className="absolute right-0 mt-2 rounded-md bg-white shadow-lg"
+          className="absolute z-50 right-0 mt-2 rounded-md bg-white shadow-lg"
         >
           <button type="button" className="block w-full rounded-t-md px-4 py-2 text-left hover:bg-gray-100">
             Přejmenovat

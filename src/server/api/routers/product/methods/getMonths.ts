@@ -34,6 +34,5 @@ export const getMonthlySales = protectedProcedure.query(async () => {
     });
     currentMonth = addMonths(currentMonth, 1);
   }
-
-  return { monthlySales: months };
+  return months;
 });
