@@ -17,8 +17,6 @@ export default async function Page({ params }: { params: { id: string } }) {
   const { totalProducts, totalSales, totalRestock } =
     await api.category.getStats.query(parseInt(params.id, 10));
 
-  await api.product.getMonths.query();
-
   return (
     <div className="space-y-8">
       <h1 className="text-4xl font-bold">{category?.name}</h1>
