@@ -27,3 +27,11 @@ export const listActionsInput = z.object({
   page: z.number().min(1),
   productId: z.number(),
 });
+
+export const deleteManySchema = z.array(z.number());
+
+export const editProductSchema = z.object({
+  id: z.number(),
+  name: z.string().optional(),
+  price: z.number().optional(),
+});

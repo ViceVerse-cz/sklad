@@ -6,7 +6,9 @@ import { listActions } from "./methods/listActions";
 import { listAll } from "./methods/listAll";
 import { listLastActions } from "./methods/listLastActions";
 import { stockProducts } from "./methods/stock";
-import { getMonthlySales } from "./methods/getMonths"
+import { getMonthlySales } from "./methods/getMonths";
+import { deleteMany } from "./methods/deleteMany";
+import { editProduct } from "./methods/edit";
 
 export const productRouter = createTRPCRouter({
   delete: deleteProduct,
@@ -15,5 +17,7 @@ export const productRouter = createTRPCRouter({
   listAll: listAll,
   listActions: listActions,
   listLastActions: listLastActions,
-  getMonths: getMonthlySales
+  getMonths: getMonthlySales,
+  deleteMany: deleteMany,
+  edit: editProduct,
 });

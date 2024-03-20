@@ -2,7 +2,7 @@
 
 import { StatCard } from "@/app/_components/dashboard/StatCard";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { RxReload } from "react-icons/rx";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
@@ -16,22 +16,29 @@ import {
 import { api } from "@/trpc/react";
 import { useState } from "react";
 import { RxAccessibility, RxAlignBottom, RxPencil2 } from "react-icons/rx";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import Input from "@/app/_components/Popup/Input";
+import { Product } from "@prisma/client";
+import { CategoryProductsTable } from "@/app/_components/dashboard/CategoryProductsTable";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const toggleId = (id: number) => {
-    if (selectedIds.includes(id)) {
-      setSelectedIds(selectedIds.filter((i) => i !== id));
-    } else {
-      setSelectedIds([...selectedIds, id]);
-    }
-  };
-  const isSelectedId = (id: number) => selectedIds.includes(id);
+  const [editingProduct, setEditingProduct] = useState<Product | undefined>();
+  const { mutateAsync: editProduct, isLoading: isEditingProduct } =
+    api.product.edit.useMutation();
+  const onEditProduct = async () => {
+    if (!editingProduct) return;
 
-  const { data } = api.category.getCategory.useQuery(parseInt(params.id, 10));
-  const { data: stats } = api.category.getStats.useQuery(
-    parseInt(params.id, 10),
-  );
+    await editProduct({ id: editingProduct.id, name: "new name" });
+    setEditingProduct(undefined);
+  };
+
+  const { data: stats } = api.category.getStats.useQuery(Number(params.id));
+  const { data } = api.category.getCategory.useQuery(Number(params.id));
 
   return (
     <div className="space-y-8">
@@ -56,53 +63,37 @@ export default async function Page({ params }: { params: { id: string } }) {
       </div>
 
       <h2 className="text-xl font-semibold">Produkty</h2>
-      <Table>
-        <TableCaption>A list of your recent invoices.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead />
-            <TableHead className="w-[100px]">Jméno</TableHead>
-            <TableHead>Cena</TableHead>
-            <TableHead>Počet</TableHead>
-            <TableHead>Celkem prodáno</TableHead>
-            <TableHead>Celkem prodáno za</TableHead>
-            <TableHead>
-              <Button>Delete</Button>
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data?.products.map((product) => (
-            <TableRow key={product.id}>
-              <TableCell>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    checked={isSelectedId(product.id)}
-                    onCheckedChange={() => toggleId(product.id)}
-                    id="terms"
-                  />
-                </div>
-              </TableCell>
-              <TableCell className="font-medium">{product.name}</TableCell>
-              <TableCell>{String(product.price)}</TableCell>
-              <TableCell>{product.quantity}</TableCell>
-              <TableCell>{product.soldCount}</TableCell>
-              <TableCell>{product.soldPrice}</TableCell>
-              <TableCell>
-                <Button variant="ghost">
-                  <RxPencil2 />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-        {/* <TableFooter>
-          <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
-          </TableRow>
-        </TableFooter> */}
-      </Table>
+      <CategoryProductsTable
+        categoryId={Number(params.id)}
+        onSetEditingProduct={setEditingProduct}
+      />
+
+      <Dialog
+        open={!!editingProduct}
+        onOpenChange={(open) =>
+          setEditingProduct(!open ? undefined : editingProduct)
+        }
+      >
+        <DialogContent>
+          <DialogTitle>Upravit produkt</DialogTitle>
+          <Input
+            type="text"
+            defaultValue={editingProduct?.name}
+            label="Jméno"
+          />
+
+          <Input
+            type="number"
+            defaultValue={String(editingProduct?.price ?? 0)}
+            label="Cena"
+          />
+
+          <div className="flex flex-row gap-2">
+            <Button onClick={() => setEditingProduct(undefined)}>Zrušit</Button>
+            <Button onClick={onEditProduct}>Upravit</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
