@@ -1,8 +1,7 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
+
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { api } from "@/trpc/react";
-import { Decimal } from "@prisma/client/runtime/library";
 
 export const Stats = () => {
   const { data: monthlyData } = api.product.getMonths.useQuery();
@@ -13,6 +12,7 @@ export const Stats = () => {
 
   const chartData = monthlyData.map((item) => ({
     name: item.month,
+    // @ts-ignore
     total: parseFloat(item.totalSales),
   }));
 

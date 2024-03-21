@@ -2,34 +2,29 @@
 
 import { StatCard } from "@/app/_components/dashboard/StatCard";
 import { Button } from "@/components/ui/button";
-import { RxReload } from "react-icons/rx";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { api } from "@/trpc/react";
 import { useState } from "react";
 import { RxAccessibility, RxAlignBottom, RxPencil2 } from "react-icons/rx";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import Input from "@/app/_components/Popup/Input";
 import { Product } from "@prisma/client";
 import { CategoryProductsTable } from "@/app/_components/dashboard/CategoryProductsTable";
 
 export default async function Page({ params }: { params: { id: string } }) {
+  const { mutateAsync: editProduct } = api.product.edit.useMutation();
+
   const [editingProduct, setEditingProduct] = useState<Product | undefined>();
-  const { mutateAsync: editProduct, isLoading: isEditingProduct } =
-    api.product.edit.useMutation();
+  const changeProduct = <T,>(
+    property: keyof Product & string,
+    value: T,
+  ): void => {
+    if (!editingProduct) return;
+
+    setEditingProduct({
+      ...editingProduct,
+      [property]: value,
+    });
+  };
   const onEditProduct = async () => {
     if (!editingProduct) return;
 
@@ -46,6 +41,8 @@ export default async function Page({ params }: { params: { id: string } }) {
 
       <div className="grid grid-cols-3 gap-6">
         <StatCard
+          additionalContent={<Button variant="outline">Doskladnit</Button>}
+          onAdditionalContentClick={() => alert("doskladnit")}
           Icon={RxAccessibility}
           title="Počet doskladnění"
           value={stats?.totalRestock}
@@ -59,6 +56,8 @@ export default async function Page({ params }: { params: { id: string } }) {
           Icon={RxAlignBottom}
           title="Počet prodejů"
           value={stats?.totalSales}
+          additionalContent={<Button variant="outline">Prodat</Button>}
+          onAdditionalContentClick={() => alert("prodat")}
         />
       </div>
 
@@ -77,14 +76,16 @@ export default async function Page({ params }: { params: { id: string } }) {
         <DialogContent>
           <DialogTitle>Upravit produkt</DialogTitle>
           <Input
-            type="text"
+            onChange={(e) => changeProduct("name", e.target.value)}
             defaultValue={editingProduct?.name}
+            type="text"
             label="Jméno"
           />
 
           <Input
+            onChange={(e) => changeProduct("price", Number(e.target.value))}
+            defaultValue={String(editingProduct?.price)}
             type="number"
-            defaultValue={String(editingProduct?.price ?? 0)}
             label="Cena"
           />
 
