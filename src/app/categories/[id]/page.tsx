@@ -25,10 +25,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     });
   };
   const { mutateAsync: editProduct, isLoading: isEditingProduct } =
-    api.product.edit.useMutation(
-      {},
-      { refetchOnWindowFocus: false, refetchOnMount: false },
-    );
+    api.product.edit.useMutation();
   const onEditProduct = async () => {
     if (!editingProduct) return;
 

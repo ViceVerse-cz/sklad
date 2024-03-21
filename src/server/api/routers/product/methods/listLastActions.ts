@@ -4,18 +4,6 @@ import { createPaginator } from "prisma-pagination";
 import { listAllActionsInput } from "../schema";
 import { ActionHistory } from "@prisma/client";
 
-type PaginatedResult<T> = {
-  items: T[];
-  meta: {
-    total: number;
-    totalPages: number;
-    currentPage: number;
-    perPage: number;
-    prev: number | null;
-    next: number | null;
-  };
-};
-
 const paginate = createPaginator({ perPage: 5 });
 
 export const listLastActions = protectedProcedure
