@@ -16,7 +16,8 @@ import { RestockProduct } from "./RestockProduct";
 import { useState } from "react";
 
 export const AllProductsTable = () => {
-  const { data: products } = api.product.listAll.useQuery();
+  const { data: products, refetch: refetchProducts } =
+    api.product.listAll.useQuery();
 
   const [restock, setRestock] = useState(false);
   const [stock, setStock] = useState(false);
@@ -30,6 +31,7 @@ export const AllProductsTable = () => {
         onClose={() => {
           setStock(false);
           setProductId(undefined);
+          refetchProducts();
         }}
       />
       <RestockProduct
@@ -38,6 +40,7 @@ export const AllProductsTable = () => {
         onClose={() => {
           setRestock(false);
           setProductId(undefined);
+          refetchProducts();
         }}
       />
 
