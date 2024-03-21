@@ -10,6 +10,10 @@ export const getStats = protectedProcedure
       where: {
         categoryId: input,
       },
+      select: {
+        product: true,
+        productId: true,
+      },
     });
 
     const actions = await db.actionHistory.findMany({
@@ -21,9 +25,14 @@ export const getStats = protectedProcedure
     });
 
     return {
+      totalProductsCount: totalProducts.reduce((prev, curr) => {
+        return prev + curr.product.quantity;
+      }, 0),
       totalProducts: totalProducts.length,
-      totalSales: actions.filter((action) => action.type === "SOLD").length,
-      totalRestock: actions.filter((action) => action.type === "RESTOCK")
-        .length,
+      totalSold: actions
+        .filter((item) => item.type === "SOLD")
+        .reduce((prev, curr) => {
+          return prev + curr.quantity;
+        }, 0),
     };
   });

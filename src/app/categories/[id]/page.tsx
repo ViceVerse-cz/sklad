@@ -26,17 +26,17 @@ export default function Page({ params }: { params: { id: string } }) {
         <StatCard
           Icon={RxPencil2}
           title="Počet produktů"
-          value={stats?.totalProducts}
+          value={stats?.totalProductsCount}
         />
         <StatCard
           Icon={CiInboxIn}
-          title="Počet doskladnění"
-          value={stats?.totalRestock}
+          title="Druhy produktů"
+          value={stats?.totalProducts}
         />
         <StatCard
           Icon={CiInboxOut}
           title="Počet prodejů"
-          value={stats?.totalSales}
+          value={stats?.totalSold}
         />
       </div>
 
