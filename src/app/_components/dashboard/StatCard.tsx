@@ -26,13 +26,15 @@ export const StatCard = forwardRef(
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{value}</div>
-          <button
-            type="button"
-            onClick={onAdditionalContentClick}
-            className="mt-2.5 text-xs text-muted-foreground"
-          >
-            {additionalContent}
-          </button>
+          {additionalContent && (
+            <button
+              type="button"
+              onClick={onAdditionalContentClick}
+              className="mt-2.5 text-xs text-muted-foreground"
+            >
+              {additionalContent}
+            </button>
+          )}
         </CardContent>
       </Card>
     );
