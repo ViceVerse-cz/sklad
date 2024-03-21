@@ -2,24 +2,13 @@
 
 import { StatCard } from "@/app/_components/dashboard/StatCard";
 import { Button } from "@/components/ui/button";
-import { RxReload } from "react-icons/rx";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { CiInboxIn, CiInboxOut } from "react-icons/ci";
 import { api } from "@/trpc/react";
 import { useState } from "react";
-import { RxAccessibility, RxAlignBottom, RxPencil2 } from "react-icons/rx";
+import { RxPencil2 } from "react-icons/rx";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
 import Input from "@/app/_components/Popup/Input";
@@ -29,7 +18,7 @@ import { CategoryProductsTable } from "@/app/_components/dashboard/CategoryProdu
 export default async function Page({ params }: { params: { id: string } }) {
   const [editingProduct, setEditingProduct] = useState<Product | undefined>();
   const { mutateAsync: editProduct, isLoading: isEditingProduct } =
-    api.product.edit.useMutation();
+    api.product.edit.useMutation({}, { refetchOnWindowFocus: false, refetchOnMount: false });
   const onEditProduct = async () => {
     if (!editingProduct) return;
 
@@ -46,17 +35,17 @@ export default async function Page({ params }: { params: { id: string } }) {
 
       <div className="grid grid-cols-3 gap-6">
         <StatCard
-          Icon={RxAccessibility}
-          title="Počet doskladnění"
-          value={stats?.totalRestock}
-        />
-        <StatCard
           Icon={RxPencil2}
           title="Počet produktů"
           value={stats?.totalProducts}
         />
         <StatCard
-          Icon={RxAlignBottom}
+          Icon={CiInboxIn}
+          title="Počet doskladnění"
+          value={stats?.totalRestock}
+        />
+        <StatCard
+          Icon={CiInboxOut}
           title="Počet prodejů"
           value={stats?.totalSales}
         />
