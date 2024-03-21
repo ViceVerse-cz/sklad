@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import { RxPencil2, RxReload } from "react-icons/rx";
 import { Checkbox } from "@/components/ui/checkbox";

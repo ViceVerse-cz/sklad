@@ -1,40 +1,24 @@
 "use client";
 
 import { StatCard } from "@/app/_components/dashboard/StatCard";
-import { Button } from "@/components/ui/button";
+import ClientButton from "./ClientButton";
 import { CiInboxIn, CiInboxOut } from "react-icons/ci";
-import { api } from "@/trpc/react";
-import { useState } from "react";
 import { RxPencil2 } from "react-icons/rx";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import Input from "@/app/_components/Popup/Input";
-import { Product } from "@prisma/client";
 import { CategoryProductsTable } from "@/app/_components/dashboard/CategoryProductsTable";
+import { useCategory } from "./useCategory";
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const [editingProduct, setEditingProduct] = useState<Product | undefined>();
-  const changeProduct = <T,>(
-    property: keyof Product & string,
-    value: T,
-  ): void => {
-    if (!editingProduct) return;
-
-    setEditingProduct({
-      ...editingProduct,
-      [property]: value,
-    });
-  };
-  const { mutateAsync: editProduct, isLoading: isEditingProduct } =
-    api.product.edit.useMutation();
-  const onEditProduct = async () => {
-    if (!editingProduct) return;
-
-    await editProduct({ id: editingProduct.id, name: "new name" });
-    setEditingProduct(undefined);
-  };
-
-  const { data: stats } = api.category.getStats.useQuery(Number(params.id));
-  const { data } = api.category.getCategory.useQuery(Number(params.id));
+export default function Page({ params }: { params: { id: string } }) {
+  const {
+    editingProduct,
+    setEditingProduct,
+    changeProduct,
+    isEditingProduct,
+    onEditProduct,
+    stats,
+    data,
+  } = useCategory(Number(params.id));
 
   return (
     <div className="space-y-8">
@@ -42,7 +26,9 @@ export default async function Page({ params }: { params: { id: string } }) {
 
       <div className="grid grid-cols-3 gap-6">
         <StatCard
-          additionalContent={<Button variant="outline">Doskladnit</Button>}
+          additionalContent={
+            <ClientButton variant="outline">Doskladnit</ClientButton>
+          }
           onAdditionalContentClick={() => alert("doskladnit")}
           Icon={RxPencil2}
           title="Počet produktů"
@@ -57,7 +43,9 @@ export default async function Page({ params }: { params: { id: string } }) {
           Icon={CiInboxOut}
           title="Počet prodejů"
           value={stats?.totalSales}
-          additionalContent={<Button variant="outline">Prodat</Button>}
+          additionalContent={
+            <ClientButton variant="outline">Prodat</ClientButton>
+          }
           onAdditionalContentClick={() => alert("prodat")}
         />
       </div>
@@ -91,8 +79,10 @@ export default async function Page({ params }: { params: { id: string } }) {
           />
 
           <div className="flex flex-row gap-2">
-            <Button onClick={() => setEditingProduct(undefined)}>Zrušit</Button>
-            <Button onClick={onEditProduct}>Upravit</Button>
+            <ClientButton onClick={() => setEditingProduct(undefined)}>
+              Zrušit
+            </ClientButton>
+            <ClientButton onClick={onEditProduct}>Upravit</ClientButton>
           </div>
         </DialogContent>
       </Dialog>
