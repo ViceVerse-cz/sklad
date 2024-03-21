@@ -1,13 +1,12 @@
-"use client";
-
-import { StatCard } from "@/app/_components/dashboard/StatCard";
-import ClientButton from "./ClientButton";
-import { CiInboxIn, CiInboxOut } from "react-icons/ci";
-import { RxPencil2 } from "react-icons/rx";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import Input from "@/app/_components/Popup/Input";
-import { CategoryProductsTable } from "@/app/_components/dashboard/CategoryProductsTable";
-import { useCategory } from "./useCategory";
+'use client';
+import { StatCard } from '@/app/_components/dashboard/StatCard';
+import ClientButton from './ClientButton';
+import { CiInboxIn, CiInboxOut } from 'react-icons/ci';
+import { RxPencil2 } from 'react-icons/rx';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import Input from '@/app/_components/Popup/Input';
+import { CategoryProductsTable } from '@/app/_components/dashboard/CategoryProductsTable';
+import { useCategory } from './useCategory';
 
 export default function Page({ params }: { params: { id: string } }) {
   const {

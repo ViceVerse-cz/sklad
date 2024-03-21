@@ -37,7 +37,7 @@ export interface ActionHistory {
   productId: number;
 }
 
-export async function SalesEntry({ actions }: { actions: ActionHistory[] }) {
+export function SalesEntry({ actions }: { actions: ActionHistory[] }) {
   return (
     <>
       {actions.map((item: ActionHistory) => (

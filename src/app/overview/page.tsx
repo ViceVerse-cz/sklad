@@ -10,7 +10,7 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Overview } from "../_components/dashboard/Overview";
 import { Stats } from "../_components/dashboard/Stats"
 
-export default async () => {
+export default () => {
   return (
     <Tabs defaultValue="overview" className="mt-4 h-full space-y-4">
       <h1 className="text-3xl font-bold">Dashboard</h1>
