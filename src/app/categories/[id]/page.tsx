@@ -1,43 +1,24 @@
-"use client";
+'use client';
 
-import { StatCard } from "@/app/_components/dashboard/StatCard";
-import { Button } from "@/components/ui/button";
-import { CiInboxIn, CiInboxOut } from "react-icons/ci";
-import { api } from "@/trpc/react";
-import { useState } from "react";
-import { RxPencil2 } from "react-icons/rx";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import Input from "@/app/_components/Popup/Input";
-import { Product } from "@prisma/client";
-import { CategoryProductsTable } from "@/app/_components/dashboard/CategoryProductsTable";
+import { StatCard } from '@/app/_components/dashboard/StatCard';
+import { Button } from '@/components/ui/button';
+import { CiInboxIn, CiInboxOut } from 'react-icons/ci';
+import { RxPencil2 } from 'react-icons/rx';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import Input from '@/app/_components/Popup/Input';
+import { CategoryProductsTable } from '@/app/_components/dashboard/CategoryProductsTable';
+import { useCategory } from './useCategory';
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const [editingProduct, setEditingProduct] = useState<Product | undefined>();
-  const changeProduct = <T,>(
-    property: keyof Product & string,
-    value: T,
-  ): void => {
-    if (!editingProduct) return;
-
-    setEditingProduct({
-      ...editingProduct,
-      [property]: value,
-    });
-  };
-  const { mutateAsync: editProduct, isLoading: isEditingProduct } =
-    api.product.edit.useMutation(
-      {},
-      { refetchOnWindowFocus: false, refetchOnMount: false },
-    );
-  const onEditProduct = async () => {
-    if (!editingProduct) return;
-
-    await editProduct({ id: editingProduct.id, name: "new name" });
-    setEditingProduct(undefined);
-  };
-
-  const { data: stats } = api.category.getStats.useQuery(Number(params.id));
-  const { data } = api.category.getCategory.useQuery(Number(params.id));
+export default function Page({ params }: { params: { id: string } }) {
+  const {
+    editingProduct,
+    setEditingProduct,
+    changeProduct,
+    isEditingProduct,
+    onEditProduct,
+    stats,
+    data,
+  } = useCategory(Number(params.id));
 
   return (
     <div className="space-y-8">
