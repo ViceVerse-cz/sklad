@@ -14,7 +14,6 @@ export default function Page({ params }: { params: { id: string } }) {
     editingProduct,
     setEditingProduct,
     changeProduct,
-    isEditingProduct,
     onEditProduct,
     stats,
     data,
@@ -26,10 +25,6 @@ export default function Page({ params }: { params: { id: string } }) {
 
       <div className="grid grid-cols-3 gap-6">
         <StatCard
-          additionalContent={
-            <ClientButton variant="outline">Doskladnit</ClientButton>
-          }
-          onAdditionalContentClick={() => alert("doskladnit")}
           Icon={RxPencil2}
           title="Počet produktů"
           value={stats?.totalProducts}
@@ -43,10 +38,6 @@ export default function Page({ params }: { params: { id: string } }) {
           Icon={CiInboxOut}
           title="Počet prodejů"
           value={stats?.totalSales}
-          additionalContent={
-            <ClientButton variant="outline">Prodat</ClientButton>
-          }
-          onAdditionalContentClick={() => alert("prodat")}
         />
       </div>
 
