@@ -1,7 +1,7 @@
 'use client';
 
 import { StatCard } from '@/app/_components/dashboard/StatCard';
-import { Button } from '@/components/ui/button';
+import ClientButton from './ClientButton';
 import { CiInboxIn, CiInboxOut } from 'react-icons/ci';
 import { RxPencil2 } from 'react-icons/rx';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
@@ -26,7 +26,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
       <div className="grid grid-cols-3 gap-6">
         <StatCard
-          additionalContent={<Button variant="outline">Doskladnit</Button>}
+          additionalContent={<ClientButton variant="outline">Doskladnit</ClientButton>}
           onAdditionalContentClick={() => alert("doskladnit")}
           Icon={RxPencil2}
           title="Počet produktů"
@@ -41,7 +41,7 @@ export default function Page({ params }: { params: { id: string } }) {
           Icon={CiInboxOut}
           title="Počet prodejů"
           value={stats?.totalSales}
-          additionalContent={<Button variant="outline">Prodat</Button>}
+          additionalContent={<ClientButton variant="outline">Prodat</ClientButton>}
           onAdditionalContentClick={() => alert("prodat")}
         />
       </div>
@@ -75,8 +75,8 @@ export default function Page({ params }: { params: { id: string } }) {
           />
 
           <div className="flex flex-row gap-2">
-            <Button onClick={() => setEditingProduct(undefined)}>Zrušit</Button>
-            <Button onClick={onEditProduct}>Upravit</Button>
+            <ClientButton onClick={() => setEditingProduct(undefined)}>Zrušit</ClientButton>
+            <ClientButton onClick={onEditProduct}>Upravit</ClientButton>
           </div>
         </DialogContent>
       </Dialog>
