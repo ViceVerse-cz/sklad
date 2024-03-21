@@ -2,17 +2,16 @@
 
 import { StatCard } from "@/app/_components/dashboard/StatCard";
 import { Button } from "@/components/ui/button";
+import { CiInboxIn, CiInboxOut } from "react-icons/ci";
 import { api } from "@/trpc/react";
 import { useState } from "react";
-import { RxAccessibility, RxAlignBottom, RxPencil2 } from "react-icons/rx";
+import { RxPencil2 } from "react-icons/rx";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import Input from "@/app/_components/Popup/Input";
 import { Product } from "@prisma/client";
 import { CategoryProductsTable } from "@/app/_components/dashboard/CategoryProductsTable";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const { mutateAsync: editProduct } = api.product.edit.useMutation();
-
   const [editingProduct, setEditingProduct] = useState<Product | undefined>();
   const changeProduct = <T,>(
     property: keyof Product & string,
@@ -25,6 +24,11 @@ export default async function Page({ params }: { params: { id: string } }) {
       [property]: value,
     });
   };
+  const { mutateAsync: editProduct, isLoading: isEditingProduct } =
+    api.product.edit.useMutation(
+      {},
+      { refetchOnWindowFocus: false, refetchOnMount: false },
+    );
   const onEditProduct = async () => {
     if (!editingProduct) return;
 
@@ -43,17 +47,17 @@ export default async function Page({ params }: { params: { id: string } }) {
         <StatCard
           additionalContent={<Button variant="outline">Doskladnit</Button>}
           onAdditionalContentClick={() => alert("doskladnit")}
-          Icon={RxAccessibility}
-          title="Počet doskladnění"
-          value={stats?.totalRestock}
-        />
-        <StatCard
           Icon={RxPencil2}
           title="Počet produktů"
           value={stats?.totalProducts}
         />
         <StatCard
-          Icon={RxAlignBottom}
+          Icon={CiInboxIn}
+          title="Počet doskladnění"
+          value={stats?.totalRestock}
+        />
+        <StatCard
+          Icon={CiInboxOut}
           title="Počet prodejů"
           value={stats?.totalSales}
           additionalContent={<Button variant="outline">Prodat</Button>}

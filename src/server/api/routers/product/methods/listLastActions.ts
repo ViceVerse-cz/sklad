@@ -31,7 +31,7 @@ export const listLastActions = protectedProcedure
           },
           include: {
             product: true,
-          }
+          },
         },
         { page: input.page },
       ),

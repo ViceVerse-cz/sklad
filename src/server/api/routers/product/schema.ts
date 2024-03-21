@@ -19,6 +19,10 @@ export const stockProductsSchema = z.object({
 
 export const listAllQueryInput = z.number().min(1);
 
+export const listAllActionsInput = z.object({
+  page: z.number().min(1),
+});
+
 export const listActionsInput = z.object({
   page: z.number().min(1),
   productId: z.number(),
