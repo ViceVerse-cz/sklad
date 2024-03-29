@@ -1,14 +1,15 @@
-'use client';
-import { StatCard } from '@/app/_components/dashboard/StatCard';
-import ClientButton from './ClientButton';
-import { CiInboxIn, CiInboxOut } from 'react-icons/ci';
-import { RxPencil2 } from 'react-icons/rx';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import Input from '@/app/_components/Popup/Input';
-import { CategoryProductsTable } from '@/app/_components/dashboard/CategoryProductsTable';
-import { useCategory } from './useCategory';
+"use client";
+import { StatCard } from "@/app/_components/dashboard/StatCard";
+import ClientButton from "./ClientButton";
+import { CiInboxIn, CiInboxOut } from "react-icons/ci";
+import { RxPencil2 } from "react-icons/rx";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import Input from "@/app/_components/Popup/Input";
+import { CategoryProductsTable } from "@/app/_components/dashboard/CategoryProductsTable";
+import { useCategory } from "./useCategory";
+import { Page } from "@/app/_components/Page";
 
-export default function Page({ params }: { params: { id: string } }) {
+export default ({ params }: { params: { id: string } }) => {
   const {
     editingProduct,
     setEditingProduct,
@@ -19,7 +20,7 @@ export default function Page({ params }: { params: { id: string } }) {
   } = useCategory(Number(params.id));
 
   return (
-    <div className="space-y-8">
+    <Page className="space-y-8">
       <h1 className="text-4xl font-bold">{data?.category?.name}</h1>
 
       <div className="grid grid-cols-3 gap-6">
@@ -76,6 +77,6 @@ export default function Page({ params }: { params: { id: string } }) {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </Page>
   );
-}
+};

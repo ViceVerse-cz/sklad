@@ -1,6 +1,6 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
-import { RxPencil2, RxReload } from "react-icons/rx";
+import { RxDownload, RxPencil2, RxReload, RxUpload } from "react-icons/rx";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
@@ -14,6 +14,8 @@ import {
 import { useState } from "react";
 import { api } from "@/trpc/react";
 import { Product } from "@prisma/client";
+import { RestockProduct } from "../ProductList/RestockProduct";
+import { StockProduct } from "../ProductList/StockProduct";
 
 type Props = {
   categoryId: number;
@@ -24,6 +26,10 @@ export const CategoryProductsTable = ({
   categoryId,
   onSetEditingProduct,
 }: Props) => {
+  const [restock, setRestock] = useState(false);
+  const [stock, setStock] = useState(false);
+  const [productId, setProductId] = useState<number | undefined>();
+
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const toggleId = (id: number) => {
     if (selectedIds.includes(id)) {
@@ -45,56 +51,101 @@ export const CategoryProductsTable = ({
   };
 
   return (
-    <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead />
-          <TableHead className="w-[100px]">Jméno</TableHead>
-          <TableHead>Cena</TableHead>
-          <TableHead>Počet</TableHead>
-          <TableHead>Celkem prodáno</TableHead>
-          <TableHead>Celkem prodáno za</TableHead>
-          <TableHead>
-            <Button
-              {...(isLoading && { disabled: true })}
-              className="flex flex-row gap-2"
-              onClick={onDeleteSelected}
-            >
-              {isLoading && <RxReload className="animate-spin" />}
-              Delete
-            </Button>
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data?.products.map((product) => (
-          <TableRow key={product.id}>
-            <TableCell>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  checked={isSelectedId(product.id)}
-                  onCheckedChange={() => toggleId(product.id)}
-                  id="terms"
-                />
-              </div>
-            </TableCell>
-            <TableCell className="font-medium">{product.name}</TableCell>
-            <TableCell>{String(product.price)}</TableCell>
-            <TableCell>{product.quantity}</TableCell>
-            <TableCell>{product.soldCount}</TableCell>
-            <TableCell>{product.soldPrice}</TableCell>
-            <TableCell>
+    <div>
+      <Table>
+        <TableCaption>A list of your recent invoices.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead />
+            <TableHead className="w-[100px]">Jméno</TableHead>
+            <TableHead>Cena</TableHead>
+            <TableHead>Počet</TableHead>
+            <TableHead>Celkem prodáno</TableHead>
+            <TableHead>Celkem prodáno za</TableHead>
+            <TableHead>
               <Button
-                onClick={() => onSetEditingProduct(product)}
-                variant="ghost"
+                {...(isLoading && { disabled: true })}
+                className="flex flex-row gap-2"
+                onClick={onDeleteSelected}
               >
-                <RxPencil2 />
+                {isLoading && <RxReload className="animate-spin" />}
+                Delete
               </Button>
-            </TableCell>
+            </TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {data?.products.map((product) => (
+            <TableRow key={product.id}>
+              <TableCell>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    checked={isSelectedId(product.id)}
+                    onCheckedChange={() => toggleId(product.id)}
+                    id="terms"
+                  />
+                </div>
+              </TableCell>
+              <TableCell className="font-medium">{product.name}</TableCell>
+              <TableCell>{String(product.price)}</TableCell>
+              <TableCell>{product.quantity}</TableCell>
+              <TableCell>{product.soldCount}</TableCell>
+              <TableCell>{product.soldPrice}</TableCell>
+              <TableCell className="flex flex-row gap-1.5">
+                <Button
+                  className="flex w-fit flex-row gap-1.5"
+                  onClick={() => onSetEditingProduct(product)}
+                  variant="secondary"
+                >
+                  <RxPencil2 />
+                  <p>Upravit</p>
+                </Button>
+
+                <div className="flex flex-row gap-2">
+                  <Button
+                    onClick={() => {
+                      setProductId(product.id);
+                      setStock(!stock);
+                    }}
+                    variant="outline"
+                    className="flex flex-row gap-2"
+                  >
+                    <RxUpload /> Prodat
+                  </Button>
+
+                  <Button
+                    onClick={() => {
+                      setProductId(product.id);
+                      setRestock(!restock);
+                    }}
+                    variant="outline"
+                    className="flex flex-row gap-2"
+                  >
+                    <RxDownload /> Doskladnit
+                  </Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      <RestockProduct
+        productId={productId}
+        open={restock}
+        onClose={() => {
+          refetch();
+          setRestock(false);
+        }}
+      />
+      <StockProduct
+        productId={productId}
+        open={stock}
+        onClose={() => {
+          refetch();
+          setStock(false);
+        }}
+      />
+    </div>
   );
 };
