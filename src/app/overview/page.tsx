@@ -9,11 +9,10 @@ import { RecentSales } from "../_components/dashboard/RecentSales";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Stats } from "../_components/dashboard/Stats";
 import { Overview } from "../_components/dashboard/overview";
-import { Page } from "../_components/Page";
 
 export default () => {
   return (
-    <Page>
+    <div>
       <Tabs defaultValue="overview" className="mt-4 h-full space-y-4">
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <Overview />
@@ -40,6 +39,6 @@ export default () => {
           </div>
         </TabsContent>
       </Tabs>
-    </Page>
+    </div>
   );
 };

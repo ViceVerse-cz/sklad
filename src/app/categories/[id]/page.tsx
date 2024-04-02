@@ -7,7 +7,6 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import Input from "@/app/_components/Popup/Input";
 import { CategoryProductsTable } from "@/app/_components/dashboard/CategoryProductsTable";
 import { useCategory } from "./useCategory";
-import { Page } from "@/app/_components/Page";
 
 export default ({ params }: { params: { id: string } }) => {
   const {
@@ -20,7 +19,7 @@ export default ({ params }: { params: { id: string } }) => {
   } = useCategory(Number(params.id));
 
   return (
-    <Page className="space-y-8">
+    <div className="space-y-8">
       <h1 className="text-4xl font-bold">{data?.category?.name}</h1>
 
       <div className="grid grid-cols-3 gap-6">
@@ -77,6 +76,6 @@ export default ({ params }: { params: { id: string } }) => {
           </div>
         </DialogContent>
       </Dialog>
-    </Page>
+    </div>
   );
 };

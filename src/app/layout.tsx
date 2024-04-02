@@ -34,7 +34,13 @@ export default async function RootLayout({
           fontSans.variable,
         )}
       >
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <div className={"px-8 pt-8"}>
+            <MainNav />
+
+            {children}
+          </div>
+        </TRPCReactProvider>
       </body>
     </html>
   );
