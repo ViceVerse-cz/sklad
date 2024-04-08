@@ -40,6 +40,8 @@ export interface ActionHistory {
 export function SalesEntry({ actions }: { actions: ActionHistory[] }) {
   return (
     <>
+      {actions.length === 0 && "Nenalezeny žádné produkty"}
+
       {actions.map((item: ActionHistory) => (
         <div className="flex items-center">
           <Avatar className="h-9 w-9">
@@ -53,7 +55,9 @@ export function SalesEntry({ actions }: { actions: ActionHistory[] }) {
               {item.product.description || "Neznámý produkt"}
             </p>
             <p className="text-sm text-muted-foreground">
-              {item.type === "RESTOCK" ? `Doplněno dne ${item.date.getDate()}/${item.date.getMonth() + 1}/${item.date.getFullYear()}` : `Prodáno dne ${item.date.getDate()}/${item.date.getMonth() + 1  }/${item.date.getFullYear()}`} 
+              {item.type === "RESTOCK"
+                ? `Doplněno dne ${item.date.getDate()}/${item.date.getMonth() + 1}/${item.date.getFullYear()}`
+                : `Prodáno dne ${item.date.getDate()}/${item.date.getMonth() + 1}/${item.date.getFullYear()}`}
             </p>
           </div>
           <div className="ml-auto font-medium">{item.quantity}</div>

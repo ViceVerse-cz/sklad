@@ -21,6 +21,8 @@ export const listAllQueryInput = z.number().min(1);
 
 export const listAllActionsInput = z.object({
   page: z.number().min(1),
+  from: z.date().optional(),
+  to: z.date().optional(),
 });
 
 export const listActionsInput = z.object({

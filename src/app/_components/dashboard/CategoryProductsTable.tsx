@@ -63,14 +63,16 @@ export const CategoryProductsTable = ({
             <TableHead>Celkem prodáno</TableHead>
             <TableHead>Celkem prodáno za</TableHead>
             <TableHead>
-              <Button
-                {...(isLoading && { disabled: true })}
-                className="flex flex-row gap-2"
-                onClick={onDeleteSelected}
-              >
-                {isLoading && <RxReload className="animate-spin" />}
-                Delete
-              </Button>
+              {selectedIds.length > 0 && (
+                <Button
+                  {...(isLoading && { disabled: true })}
+                  className="flex flex-row gap-2"
+                  onClick={onDeleteSelected}
+                >
+                  {isLoading && <RxReload className="animate-spin" />}
+                  Smazat vybrané
+                </Button>
+              )}
             </TableHead>
           </TableRow>
         </TableHeader>

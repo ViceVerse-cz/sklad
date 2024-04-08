@@ -17,6 +17,12 @@ export const listLastActions = protectedProcedure
           orderBy: {
             date: "desc",
           },
+          where: {
+            date: {
+              gte: input.from,
+              lte: input.to,
+            },
+          },
           include: {
             product: true,
           },

@@ -14,14 +14,14 @@ export default () => {
   return (
     <div>
       <Tabs defaultValue="overview" className="mt-4 h-full space-y-4">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <h1 className="text-3xl font-bold">Přehled</h1>
         <Overview />
 
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             <Card className="col-span-4">
               <CardHeader>
-                <CardTitle>Overview</CardTitle>
+                <CardTitle>Přehled</CardTitle>
               </CardHeader>
               <CardContent className="pl-2">
                 <Stats />

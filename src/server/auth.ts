@@ -9,6 +9,7 @@ import GoogleProvider from "next-auth/providers/google";
 
 import { env } from "@/env";
 import { db } from "@/server/db";
+import { ALLOWED_EMAILS } from "./constants";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -20,15 +21,8 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      // ...other properties
-      // role: UserRole;
     } & DefaultSession["user"];
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
 
 /**
@@ -38,13 +32,25 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    jwt: ({ token, user }) => {
+      if (user) {
+        if (ALLOWED_EMAILS.includes(user.email ?? "")) {
+          return {
+            ...token,
+            userId: user.id,
+          };
+        } else {
+          return {};
+        }
+      }
+      return token;
+    },
+    session: ({ session, token }) => {
+      if (token && session.user) {
+        session.user.id = token.userId as string;
+      }
+      return session;
+    },
   },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
@@ -53,7 +59,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.GOOGLE_CLIENT_SECRET,
       httpOptions: {
         timeout: 40000,
-      }
+      },
     }),
   ],
 };

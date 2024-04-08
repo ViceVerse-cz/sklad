@@ -19,13 +19,15 @@ type NewCategory = {
 export const CreateCategoryDialog = ({ open, onClose, onSuccess }: Props) => {
   const { mutateAsync: createCategory } =
     api.category.createCategory.useMutation({
-      onSuccess: (data) => {},
+      onSuccess: (data) => {
+        window.location.href = `/categories/${data.id}`;
+      },
     });
   const { data: products, isLoading: productsLoading } =
     api.product.listAll.useQuery();
 
   const [newData, setNewData] = useState<NewCategory>({
-    name: "New Category",
+    name: "Nová kategorie",
     productIds: [],
   });
   const onNewDataChange = (key: keyof NewCategory, value: any) => {
@@ -73,6 +75,7 @@ export const CreateCategoryDialog = ({ open, onClose, onSuccess }: Props) => {
               id="multiSelect"
               closeMenuOnSelect={false}
               isMulti
+              placeholder="Vyberte produkty"
               options={products?.map((item) => ({
                 value: item.id,
                 label: item.name,
