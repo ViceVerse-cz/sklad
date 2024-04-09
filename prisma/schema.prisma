@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Visibility {
+  Hidden
+  Visible
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -56,6 +61,7 @@ model Product {
   name        String
   description String?
   price       Decimal
+  visibility  Visibility @default(Visible)
   quantity    Int
   actions     ActionHistory[]
   productCategories ProductCategory[]

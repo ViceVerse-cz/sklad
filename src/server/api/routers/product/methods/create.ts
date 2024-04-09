@@ -13,14 +13,14 @@ export const createProduct = protectedProcedure
         quantity: input.defaultQuantity,
       },
     });
-
-    const productCategories = input.defaultCategoryIds.map((categoryId) => ({
-      productId: product.id,
-      categoryId,
-    }));
-
+    
     await db.productCategory.createMany({
-      data: productCategories,
+      data: [
+        {
+          productId: product.id,
+          categoryId: input.defaultCategoryId,
+        },
+      ],
     });
 
     return product;

@@ -1,15 +1,19 @@
 import { protectedProcedure } from "@/server/api/trpc";
-import { deleteManySchema } from "../schema";
 import { db } from "@/server/db";
+import { deleteManySchema } from "../schema";
+import { Visibility } from "@prisma/client";
 
 export const deleteMany = protectedProcedure
   .input(deleteManySchema)
-  .mutation(({ input }) => {
-    return db.product.deleteMany({
+  .mutation(async ({ input }) => {
+    return db.product.updateMany({
       where: {
         id: {
           in: input,
         },
       },
+      data: {
+        visibility: Visibility.Hidden
+      }
     });
   });

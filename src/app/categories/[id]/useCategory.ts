@@ -7,6 +7,21 @@ export const useCategory = (categoryId: number) => {
   const { data, refetch: refetchCategory } = api.category.getCategory.useQuery(categoryId);
 
   const [editingProduct, setEditingProduct] = useState<Product | undefined>();
+  const [creatingProduct, setCreatingProduct] = useState<Product | undefined>();
+
+  const addProduct = useCallback(
+    <T,>(property: keyof Product & string, value: T) => {
+      setCreatingProduct((prevProduct) => {
+        if (!prevProduct) return undefined;
+
+        return {
+          ...prevProduct,
+          [property]: value,
+        };
+      });
+    },
+    []
+  );
 
   const changeProduct = useCallback(
     <T,>(property: keyof Product & string, value: T) => {
@@ -24,6 +39,23 @@ export const useCategory = (categoryId: number) => {
 
   const { mutateAsync: editProduct, isLoading: isEditingProduct } =
     api.product.edit.useMutation();
+
+  const { mutateAsync: createProduct } = api.product.create.useMutation();
+
+  const onCreateProduct = () => {
+    if (!creatingProduct) return;
+
+    createProduct({
+      name: creatingProduct.name,
+      price: Number(creatingProduct.price),
+      defaultQuantity: creatingProduct.quantity,
+      description: creatingProduct.description,
+      defaultCategoryId: categoryId
+    });
+
+    refetchCategory();
+    setCreatingProduct(undefined);
+  };
 
   const onEditProduct = () => {
     if (!editingProduct) return;
@@ -44,6 +76,11 @@ export const useCategory = (categoryId: number) => {
     changeProduct,
     isEditingProduct,
     onEditProduct,
+    createProduct,
+    creatingProduct,
+    setCreatingProduct,
+    onCreateProduct,
+    addProduct,
     stats,
     data,
   };

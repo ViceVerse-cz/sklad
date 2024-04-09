@@ -14,6 +14,7 @@ import { RxDownload, RxUpload } from "react-icons/rx";
 import { StockProduct } from "./StockProduct";
 import { RestockProduct } from "./RestockProduct";
 import { useState } from "react";
+import { Visibility } from "@prisma/client";
 
 export const AllProductsTable = () => {
   const { data: products, refetch: refetchProducts } =
@@ -22,6 +23,7 @@ export const AllProductsTable = () => {
   const [restock, setRestock] = useState(false);
   const [stock, setStock] = useState(false);
   const [productId, setProductId] = useState<number | undefined>();
+  console.log(products)
 
   return (
     <div>
@@ -57,7 +59,7 @@ export const AllProductsTable = () => {
         </TableHeader>
 
         <TableBody>
-          {products?.map((product) => (
+          {products?.filter((product) => product.visibility === Visibility.Visible).map((product) => (
             <TableRow key={product.id}>
               <TableCell className="font-medium">{product.name}</TableCell>
               <TableCell>{String(product.price)}</TableCell>

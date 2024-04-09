@@ -2,11 +2,11 @@ import { ActionType } from "@prisma/client";
 import { z } from "zod";
 
 export const createProductSchema = z.object({
-  name: z.string().min(1),
-  description: z.string().min(1),
-  price: z.number().min(1),
+  name: z.string(),
+  description: z.string(),
+  price: z.number(),
   defaultQuantity: z.number(),
-  defaultCategoryIds: z.array(z.number()).default([]),
+  defaultCategoryId: z.number(),
 });
 
 export const deleteProductSchema = z.number();

@@ -2,13 +2,15 @@ import { protectedProcedure } from "@/server/api/trpc";
 import { getCategoryStatsSchema } from "../schema";
 import { db } from "@/server/db";
 
-// TODO: Some of the stats will be replace with another ones, this is just for testing
 export const getStats = protectedProcedure
   .input(getCategoryStatsSchema)
   .query(async ({ input }) => {
     const totalProducts = await db.productCategory.findMany({
       where: {
         categoryId: input,
+        product: {
+          visibility: 'Visible',
+        },
       },
       select: {
         product: true,

@@ -14,9 +14,16 @@ export default ({ params }: { params: { id: string } }) => {
     setEditingProduct,
     changeProduct,
     onEditProduct,
+    createProduct,
+    creatingProduct,
+    setCreatingProduct,
+    onCreateProduct,
+    addProduct,
     stats,
     data,
   } = useCategory(Number(params.id));
+
+  console.log(creatingProduct)
 
   return (
     <div className="space-y-8">
@@ -40,12 +47,56 @@ export default ({ params }: { params: { id: string } }) => {
         />
       </div>
 
-      <h2 className="text-xl font-semibold">Produkty</h2>
-      <CategoryProductsTable
-        categoryId={Number(params.id)}
-        onSetEditingProduct={setEditingProduct}
-      />
+      <div className="space-x-6">
+        <h2 className="text-xl font-semibold inline-block">Produkty</h2>
+        <ClientButton className="inline-block" onClick={setCreatingProduct}>Přidat produkt</ClientButton>
+        <CategoryProductsTable
+          categoryId={Number(params.id)}
+          onSetEditingProduct={setEditingProduct}
+        />
+      </div>
 
+      <Dialog
+        open={creatingProduct}
+        onOpenChange={(open) => !open ? setCreatingProduct(false) : open}
+      >
+        <DialogContent>
+          <DialogTitle>Přidat produkt</DialogTitle>
+          <Input
+            onChange={(e) => addProduct("name", String(e.target.value))}
+            defaultValue={creatingProduct?.name}
+            type="text"
+            label="Jméno"
+          />
+
+          <Input
+            onChange={(e) => addProduct("price", Number(e.target.value))}
+            defaultValue={String(creatingProduct?.price)}
+            type="number"
+            label="Cena"
+          />
+
+          <Input
+            onChange={(e) => addProduct("quantity", Number(e.target.value))}
+            defaultValue={String(creatingProduct?.quantity)}
+            type="number"
+            label="Počet"
+          />
+
+          <Input
+            onChange={(e) => addProduct("description", String(e.target.value))}
+            type="text"
+            label="Popis"
+          />
+
+          <div className="flex flex-row gap-2">
+            <ClientButton onClick={() => setCreatingProduct(false)}>
+              Zrušit
+            </ClientButton>
+            <ClientButton onClick={onCreateProduct}>Přidat</ClientButton>
+          </div>
+        </DialogContent>
+      </Dialog>
       <Dialog
         open={!!editingProduct}
         onOpenChange={(open) =>
