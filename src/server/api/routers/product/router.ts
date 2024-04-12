@@ -2,6 +2,7 @@ import { createTRPCRouter } from "../../trpc";
 
 import { createProduct } from "./methods/create";
 import { deleteProduct } from "./methods/delete";
+import { deleteAction } from "./methods/deleteAction";
 import { listActions } from "./methods/listActions";
 import { listAll } from "./methods/listAll";
 import { listLastActions } from "./methods/listLastActions";
@@ -12,6 +13,7 @@ import { editProduct } from "./methods/edit";
 
 export const productRouter = createTRPCRouter({
   delete: deleteProduct,
+  deleteAction: deleteAction,
   create: createProduct,
   stock: stockProducts,
   listAll: listAll,

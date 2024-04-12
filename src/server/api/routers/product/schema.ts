@@ -11,6 +11,8 @@ export const createProductSchema = z.object({
 
 export const deleteProductSchema = z.number();
 
+export const deleteActionSchema = z.number();
+
 export const stockProductsSchema = z.object({
   id: z.number(),
   quantity: z.number().min(1),

@@ -90,6 +90,7 @@ model ActionHistory {
   date       DateTime @default(now())
   product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId  Int
+  visibility Visibility @default(Visible)
 }
 
 enum ActionType {

@@ -1,6 +1,7 @@
 import { protectedProcedure } from "@/server/api/trpc";
 import { getCategorySchema } from "../schema";
 import { db } from "@/server/db";
+import { Visibility } from "@prisma/client";
 
 export const getCategory = protectedProcedure
   .input(getCategorySchema)
@@ -8,6 +9,9 @@ export const getCategory = protectedProcedure
     const productCategories = await db.productCategory.findMany({
       where: {
         categoryId: input,
+        product: {
+          visibility: Visibility.Visible
+        }
       },
       include: {
         product: true,

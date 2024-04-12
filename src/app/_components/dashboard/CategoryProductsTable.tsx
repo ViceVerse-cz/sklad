@@ -80,7 +80,7 @@ export const CategoryProductsTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.products.filter((product) => product.visibility === Visibility.Visible).map((product) => (
+          {data?.products.map((product) => (
             <TableRow key={product.id}>
               <TableCell>
                 <div className="flex items-center space-x-2">

@@ -2,7 +2,7 @@ import { protectedProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
 import { createPaginator } from "prisma-pagination";
 import { listAllActionsInput } from "../schema";
-import { ActionHistory } from "@prisma/client";
+import { ActionHistory, Visibility } from "@prisma/client";
 
 const paginate = createPaginator({ perPage: 5 });
 
@@ -22,6 +22,7 @@ export const listLastActions = protectedProcedure
               gte: input.from,
               lte: input.to,
             },
+            visibility: Visibility.Visible
           },
           include: {
             product: true,

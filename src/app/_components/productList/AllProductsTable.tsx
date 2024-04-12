@@ -59,7 +59,7 @@ export const AllProductsTable = () => {
         </TableHeader>
 
         <TableBody>
-          {products?.filter((product) => product.visibility === Visibility.Visible).map((product) => (
+          {products?.map((product) => (
             <TableRow key={product.id}>
               <TableCell className="font-medium">{product.name}</TableCell>
               <TableCell>{String(product.price)}</TableCell>

@@ -1,6 +1,7 @@
 import { protectedProcedure } from "@/server/api/trpc";
 import { getCategoryStatsSchema } from "../schema";
 import { db } from "@/server/db";
+import { Visibility } from "@prisma/client";
 
 export const getStats = protectedProcedure
   .input(getCategoryStatsSchema)
@@ -9,7 +10,7 @@ export const getStats = protectedProcedure
       where: {
         categoryId: input,
         product: {
-          visibility: 'Visible',
+          visibility: Visibility.Visible,
         },
       },
       select: {
