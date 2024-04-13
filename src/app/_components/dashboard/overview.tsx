@@ -26,16 +26,16 @@ export const Overview = () => {
     onSuccess: () => refetchCategories(),
   });
 
-  const [editOpen, setEditOpen] = useState(false);
-  const toggleEditOpen = () => setEditOpen(!editOpen);
-
-  if (isLoading) {
-    return "Načítání...";
-  }
+  const [createCategoryOpen, setCreateCategoryOpen] = useState(false);
+  const toggleCreateCategoryOpen = () => setCreateCategoryOpen((prev) => !prev);
 
   return (
     <div className="flex flex-col gap-3">
-      <Button onClick={toggleEditOpen} className="w-fit" variant="default">
+      <Button
+        onClick={toggleCreateCategoryOpen}
+        className="w-fit"
+        variant="default"
+      >
         Přidat kategorii
       </Button>
 
@@ -70,8 +70,8 @@ export const Overview = () => {
       </Carousel>
 
       <CreateCategoryDialog
-        open={editOpen}
-        onClose={toggleEditOpen}
+        open={createCategoryOpen}
+        onClose={toggleCreateCategoryOpen}
         onSuccess={refetchCategories}
       />
     </div>

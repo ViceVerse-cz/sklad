@@ -4,13 +4,14 @@ import { Product } from "@prisma/client";
 
 export const useCategory = (categoryId: number) => {
   const { data: stats } = api.category.getStats.useQuery(categoryId);
-  const { data, refetch: refetchCategory } = api.category.getCategory.useQuery(categoryId);
+  const { data, refetch: refetchCategory } =
+    api.category.getCategory.useQuery(categoryId);
 
   const [editingProduct, setEditingProduct] = useState<Product | undefined>();
   const [creatingProduct, setCreatingProduct] = useState<Product | undefined>();
 
   const addProduct = useCallback(
-    <T,>(property: keyof Product & string, value: T) => {
+    <T>(property: keyof Product & string, value: T) => {
       setCreatingProduct((prevProduct) => {
         if (!prevProduct) return undefined;
 
@@ -20,11 +21,11 @@ export const useCategory = (categoryId: number) => {
         };
       });
     },
-    []
+    [],
   );
 
   const changeProduct = useCallback(
-    <T,>(property: keyof Product & string, value: T) => {
+    <T>(property: keyof Product & string, value: T) => {
       setEditingProduct((prevProduct) => {
         if (!prevProduct) return undefined;
 
@@ -34,7 +35,7 @@ export const useCategory = (categoryId: number) => {
         };
       });
     },
-    []
+    [],
   );
 
   const { mutateAsync: editProduct, isLoading: isEditingProduct } =
@@ -50,7 +51,7 @@ export const useCategory = (categoryId: number) => {
       price: Number(creatingProduct.price),
       defaultQuantity: creatingProduct.quantity,
       description: creatingProduct.description,
-      defaultCategoryId: categoryId
+      defaultCategoryId: categoryId,
     });
 
     refetchCategory();

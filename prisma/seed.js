@@ -3,14 +3,14 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-  const user = await prisma.user.create({
-    data: {
-      name: 'John Pork',
-      email: 'michal.hrbacek@albert.einstein.epstein',
-      emailVerified: new Date(),
-      image: 'http://example.com/image.jpg',
-    },
-  })
+  // const user = await prisma.user.create({
+  //   data: {
+  //     name: 'John Pork',
+  //     email: 'michal.hrbacek@albert.einstein.epstein',
+  //     emailVerified: new Date(),
+  //     image: 'http://example.com/image.jpg',
+  //   },
+  // })
 
   const categories = await Promise.all([
     prisma.category.create({ data: { name: 'Furniture' } }),
@@ -250,7 +250,7 @@ async function main() {
     }),
   ])
 
-  console.log({ user, categories, products, actionHistories })
+  console.log({ categories, products, actionHistories })
 }
 
 

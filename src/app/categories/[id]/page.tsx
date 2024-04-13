@@ -14,7 +14,6 @@ export default ({ params }: { params: { id: string } }) => {
     setEditingProduct,
     changeProduct,
     onEditProduct,
-    createProduct,
     creatingProduct,
     setCreatingProduct,
     onCreateProduct,
@@ -22,8 +21,6 @@ export default ({ params }: { params: { id: string } }) => {
     stats,
     data,
   } = useCategory(Number(params.id));
-
-  console.log(creatingProduct)
 
   return (
     <div className="space-y-8">
@@ -48,8 +45,10 @@ export default ({ params }: { params: { id: string } }) => {
       </div>
 
       <div className="space-x-6">
-        <h2 className="text-xl font-semibold inline-block">Produkty</h2>
-        <ClientButton className="inline-block" onClick={setCreatingProduct}>Přidat produkt</ClientButton>
+        <h2 className="inline-block text-xl font-semibold">Produkty</h2>
+        <ClientButton className="inline-block" onClick={setCreatingProduct}>
+          Přidat produkt
+        </ClientButton>
         <CategoryProductsTable
           categoryId={Number(params.id)}
           onSetEditingProduct={setEditingProduct}
@@ -57,8 +56,8 @@ export default ({ params }: { params: { id: string } }) => {
       </div>
 
       <Dialog
-        open={creatingProduct}
-        onOpenChange={(open) => !open ? setCreatingProduct(false) : open}
+        open={!!creatingProduct}
+        onOpenChange={(open) => (!open ? setCreatingProduct(undefined) : open)}
       >
         <DialogContent>
           <DialogTitle>Přidat produkt</DialogTitle>
@@ -90,7 +89,7 @@ export default ({ params }: { params: { id: string } }) => {
           />
 
           <div className="flex flex-row gap-2">
-            <ClientButton onClick={() => setCreatingProduct(false)}>
+            <ClientButton onClick={() => setCreatingProduct(undefined)}>
               Zrušit
             </ClientButton>
             <ClientButton onClick={onCreateProduct}>Přidat</ClientButton>
