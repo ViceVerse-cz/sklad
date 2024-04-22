@@ -13,13 +13,16 @@ export const listActions = protectedProcedure
       db.actionHistory,
       {
         orderBy: {
-          createdAt: "desc",
+          date: "desc",
         },
         where: {
           productId: input.productId,
-          visibility: Visibility.Visible
+          visibility: Visibility.Visible,
+        },
+        include: {
+          product: true,
         },
       },
-      { page: input.page },
+      { page: input.page, perPage: 5 },
     );
   });

@@ -7,6 +7,8 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import Input from "@/app/_components/Popup/Input";
 import { CategoryProductsTable } from "@/app/_components/dashboard/CategoryProductsTable";
 import { useCategory } from "./useCategory";
+import { EditProductDialog } from "@/app/_components/dashboard/EditProductDialog";
+import { AddProductDialog } from "@/app/_components/dashboard/CreateProductDialog";
 
 export default ({ params }: { params: { id: string } }) => {
   const {
@@ -20,6 +22,7 @@ export default ({ params }: { params: { id: string } }) => {
     addProduct,
     stats,
     data,
+    refetchCategory,
   } = useCategory(Number(params.id));
 
   return (
@@ -49,83 +52,30 @@ export default ({ params }: { params: { id: string } }) => {
         <ClientButton className="inline-block" onClick={setCreatingProduct}>
           Přidat produkt
         </ClientButton>
+
         <CategoryProductsTable
+          data={data}
+          onRefetch={refetchCategory}
           categoryId={Number(params.id)}
           onSetEditingProduct={setEditingProduct}
         />
       </div>
 
-      <Dialog
+      <AddProductDialog
         open={!!creatingProduct}
+        creatingProduct={creatingProduct}
         onOpenChange={(open) => (!open ? setCreatingProduct(undefined) : open)}
-      >
-        <DialogContent>
-          <DialogTitle>Přidat produkt</DialogTitle>
-          <Input
-            onChange={(e) => addProduct("name", String(e.target.value))}
-            defaultValue={creatingProduct?.name}
-            type="text"
-            label="Jméno"
-          />
+        onAddProduct={addProduct}
+        onCreateProduct={onCreateProduct}
+      />
 
-          <Input
-            onChange={(e) => addProduct("price", Number(e.target.value))}
-            defaultValue={String(creatingProduct?.price)}
-            type="number"
-            label="Cena"
-          />
-
-          <Input
-            onChange={(e) => addProduct("quantity", Number(e.target.value))}
-            defaultValue={String(creatingProduct?.quantity)}
-            type="number"
-            label="Počet"
-          />
-
-          <Input
-            onChange={(e) => addProduct("description", String(e.target.value))}
-            type="text"
-            label="Popis"
-          />
-
-          <div className="flex flex-row gap-2">
-            <ClientButton onClick={() => setCreatingProduct(undefined)}>
-              Zrušit
-            </ClientButton>
-            <ClientButton onClick={onCreateProduct}>Přidat</ClientButton>
-          </div>
-        </DialogContent>
-      </Dialog>
-      <Dialog
+      <EditProductDialog
         open={!!editingProduct}
-        onOpenChange={(open) =>
-          setEditingProduct(!open ? undefined : editingProduct)
-        }
-      >
-        <DialogContent>
-          <DialogTitle>Upravit produkt</DialogTitle>
-          <Input
-            onChange={(e) => changeProduct("name", e.target.value)}
-            defaultValue={editingProduct?.name}
-            type="text"
-            label="Jméno"
-          />
-
-          <Input
-            onChange={(e) => changeProduct("price", Number(e.target.value))}
-            defaultValue={String(editingProduct?.price)}
-            type="number"
-            label="Cena"
-          />
-
-          <div className="flex flex-row gap-2">
-            <ClientButton onClick={() => setEditingProduct(undefined)}>
-              Zrušit
-            </ClientButton>
-            <ClientButton onClick={onEditProduct}>Upravit</ClientButton>
-          </div>
-        </DialogContent>
-      </Dialog>
+        onOpenChange={(open) => (!open ? setEditingProduct(undefined) : open)}
+        editingProduct={editingProduct}
+        onChangeProduct={changeProduct}
+        onEditProduct={onEditProduct}
+      />
     </div>
   );
 };

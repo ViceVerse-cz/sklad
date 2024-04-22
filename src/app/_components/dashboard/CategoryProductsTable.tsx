@@ -1,6 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { RxDownload, RxPencil2, RxReload, RxUpload, RxTrash, RxCalendar } from "react-icons/rx";
+import {
+  RxDownload,
+  RxPencil2,
+  RxReload,
+  RxUpload,
+  RxTrash,
+  RxCalendar,
+} from "react-icons/rx";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
@@ -19,11 +26,21 @@ import { StockProduct } from "../ProductList/StockProduct";
 
 type Props = {
   categoryId: number;
+  data:
+    | {
+        products: (Product & {
+          soldCount: number;
+          soldPrice: number;
+        })[];
+      }
+    | undefined;
+  onRefetch: VoidFunction;
   onSetEditingProduct: (product: Product) => void;
 };
 
 export const CategoryProductsTable = ({
-  categoryId,
+  data,
+  onRefetch,
   onSetEditingProduct,
 }: Props) => {
   const [restock, setRestock] = useState(false);
@@ -40,17 +57,13 @@ export const CategoryProductsTable = ({
   };
   const isSelectedId = (id: number) => selectedIds.includes(id);
 
-  const { data, refetch } = api.category.getCategory.useQuery(categoryId);
-  console.log(data)
-
   const { mutateAsync: deleteManyProducts, isLoading } =
     api.product.deleteMany.useMutation();
-  const { mutateAsync: deleteProduct } =
-    api.product.delete.useMutation();
+  const { mutateAsync: deleteProduct } = api.product.delete.useMutation();
   const onDeleteSelected = async () => {
     await deleteManyProducts(selectedIds);
     setSelectedIds([]);
-    refetch();
+    onRefetch();
   };
 
   return (
@@ -92,10 +105,10 @@ export const CategoryProductsTable = ({
                 </div>
               </TableCell>
               <TableCell className="font-medium">{product.name}</TableCell>
-              <TableCell>{String(product.price)}</TableCell>
+              <TableCell>{String(product.price)} Kč</TableCell>
               <TableCell>{product.quantity}</TableCell>
               <TableCell>{product.soldCount}</TableCell>
-              <TableCell>{product.soldPrice}</TableCell>
+              <TableCell>{product.soldPrice} Kč</TableCell>
               <TableCell className="flex flex-row gap-1.5">
                 <Button
                   className="flex w-fit flex-row gap-1.5"
@@ -132,7 +145,7 @@ export const CategoryProductsTable = ({
                   <Button
                     onClick={async () => {
                       await deleteProduct(product.id);
-                      refetch();
+                      onRefetch();
                     }}
                     variant="outline"
                     className="flex flex-row gap-2"
@@ -161,7 +174,7 @@ export const CategoryProductsTable = ({
         productId={productId}
         open={restock}
         onClose={() => {
-          refetch();
+          onRefetch();
           setRestock(false);
         }}
       />
@@ -169,7 +182,7 @@ export const CategoryProductsTable = ({
         productId={productId}
         open={stock}
         onClose={() => {
-          refetch();
+          onRefetch();
           setStock(false);
         }}
       />

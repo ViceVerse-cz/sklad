@@ -43,14 +43,14 @@ export const useCategory = (categoryId: number) => {
 
   const { mutateAsync: createProduct } = api.product.create.useMutation();
 
-  const onCreateProduct = () => {
+  const onCreateProduct = async () => {
     if (!creatingProduct) return;
 
-    createProduct({
+    await createProduct({
       name: creatingProduct.name,
       price: Number(creatingProduct.price),
       defaultQuantity: creatingProduct.quantity,
-      description: creatingProduct.description,
+      description: creatingProduct.description ?? "Popisek nezadán",
       defaultCategoryId: categoryId,
     });
 
@@ -58,10 +58,10 @@ export const useCategory = (categoryId: number) => {
     setCreatingProduct(undefined);
   };
 
-  const onEditProduct = () => {
+  const onEditProduct = async () => {
     if (!editingProduct) return;
 
-    editProduct({
+    await editProduct({
       id: editingProduct.id,
       name: editingProduct.name,
       price: Number(editingProduct.price),
@@ -84,5 +84,6 @@ export const useCategory = (categoryId: number) => {
     addProduct,
     stats,
     data,
+    refetchCategory,
   };
 };

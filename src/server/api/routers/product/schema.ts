@@ -19,6 +19,15 @@ export const stockProductsSchema = z.object({
   type: z.nativeEnum(ActionType),
 });
 
+export const listAllProductsSchema = z.object({
+  dateRange: z
+    .object({
+      from: z.date().optional(),
+      to: z.date().optional(),
+    })
+    .optional(),
+});
+
 export const listAllQueryInput = z.number().min(1);
 
 export const listAllActionsInput = z.object({

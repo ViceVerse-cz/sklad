@@ -1,8 +1,8 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Decimal } from "@prisma/client/runtime/library";
-import { RxTrash } from "react-icons/rx"
 import { api } from "@/trpc/react";
-import { Button } from "@/components/ui/button";
+import { Action } from "./Action";
+import { WarningPopup } from "./WarningPopup";
+import { useState } from "react";
 
 export enum ActionType {
   RESTOCK = "RESTOCK",
@@ -41,50 +41,48 @@ export interface ActionHistory {
   productId: number;
 }
 
-export function SalesEntry({ actions }: { actions: ActionHistory[] }) {
-  const { mutate: deleteAction } = api.product.deleteAction.useMutation();
+export function SalesEntry({
+  actions,
+  onRefetch,
+}: {
+  actions: ActionHistory[];
+  onRefetch: VoidFunction;
+}) {
+  const [warningOpen, setWarningOpen] = useState(false);
+  const toggleWarningOpen = () => {
+    setWarningOpen((prev) => !prev);
+  };
 
-  const handleDelete = (action: ActionHistory) => {
-    deleteAction(action.id);
+  const { mutate: deleteAction } = api.product.deleteAction.useMutation();
+  const [deletingAction, setDeletingAction] = useState<ActionHistory | null>(
+    null,
+  );
+  const handleDeleteOpen = (action: ActionHistory) => {
+    setDeletingAction(action);
+    toggleWarningOpen();
+  };
+  const handleDelete = async () => {
+    if (deletingAction) {
+      toggleWarningOpen();
+
+      await deleteAction(deletingAction?.id);
+      onRefetch();
+    }
   };
 
   return (
     <>
       {actions.length === 0 && "Nenalezeny žádné produkty"}
       {actions.map((item: ActionHistory) => (
-        <div key={item.id} className="flex items-center">
-          <Avatar className="h-9 w-9">
-            <AvatarImage src="/avatars/01.png" alt="Avatar" />
-            <AvatarFallback>
-              {item.type === "RESTOCK" ? "+" : "-"}
-            </AvatarFallback>
-          </Avatar>
-          <div className="ml-4 space-y-1">
-            <p className="text-sm font-medium leading-none">
-              {item.product.description || "Neznámý produkt"}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {item.type === "RESTOCK"
-                ? `Doplněno dne ${item.date.getDate()}/${
-                    item.date.getMonth() + 1
-                  }/${item.date.getFullYear()}`
-                : `Prodáno dne ${item.date.getDate()}/${
-                    item.date.getMonth() + 1
-                  }/${item.date.getFullYear()}`}
-            </p>
-          </div>
-          <div className="ml-auto font-medium">
-            {item.quantity}
-            <Button
-              className="ml-4 px-2 py-1 rounded"
-              onClick={() => handleDelete(item)}
-            >
-              Smazat
-              <RxTrash/>
-            </Button>
-          </div>
-        </div>
+        <Action item={item} handleDelete={handleDeleteOpen} />
       ))}
+
+      <WarningPopup
+        text="Opravdu chcete smazat tuto akci?"
+        open={warningOpen}
+        onClose={toggleWarningOpen}
+        onConfirm={handleDelete}
+      />
     </>
   );
 }

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ActionHistory, SalesEntry } from "./SalesEntry";
 import { api } from "@/trpc/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { DateRangePicker } from "@/components/ui/daterangePicker";
 import { DateRange } from "react-day-picker";
 
@@ -20,6 +20,8 @@ type PaginatedResult<T> = {
 };
 
 export function RecentSales() {
+  const scrollableContainer = useRef<HTMLDivElement>(null);
+
   const [page, setPage] = useState(1);
   const [actions, setActions] = useState<ActionHistory[]>([]);
   const [dateRange, setDateRange] = useState<DateRange>();
@@ -31,16 +33,36 @@ export function RecentSales() {
     setDateRange(date);
   };
 
-  const { data } = api.product.listLastActions.useQuery(
+  const onScrollContainer = () => {
+    setTimeout(() => {
+      if (scrollableContainer.current) {
+        scrollableContainer.current.scrollTo({
+          top: scrollableContainer.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+    }, 150);
+  };
+
+  const onLoadActions = (data: PaginatedResult<ActionHistory>) => {
+    setActions((prevActions) => [...prevActions, ...data.items]);
+    setTotalCount(data.meta.total);
+    onScrollContainer();
+  };
+
+  const onRefetchActions = () => {
+    setActions([]);
+    setPage(1);
+    refetch();
+  };
+
+  const { data, refetch } = api.product.listLastActions.useQuery(
     { page, from: dateRange?.from, to: dateRange?.to },
     {
       enabled: page > 0,
       keepPreviousData: false,
       refetchOnWindowFocus: false,
-      onSuccess: (data: PaginatedResult<ActionHistory>) => {
-        setActions((prevActions) => [...prevActions, ...data.items]);
-        setTotalCount(data.meta.total);
-      },
+      onSuccess: onLoadActions,
     },
   );
 
@@ -60,8 +82,11 @@ export function RecentSales() {
         />
       </div>
 
-      <div className="h-[250px] space-y-8 overflow-y-auto">
-        <SalesEntry actions={actions} />
+      <div
+        ref={scrollableContainer}
+        className="h-[250px] space-y-8 overflow-y-auto"
+      >
+        <SalesEntry onRefetch={onRefetchActions} actions={actions} />
       </div>
 
       {showLoadMoreButton && (

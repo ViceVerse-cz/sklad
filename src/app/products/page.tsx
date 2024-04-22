@@ -1,4 +1,4 @@
-import { AllProductsTable } from "../_components/productList/AllProductsTable";
+import { AllProductsTable } from "../_components/ProductList/AllProductsTable";
 
 export default () => {
   return (
