@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import {
   RxDownload,
@@ -20,9 +21,10 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import { api } from "@/trpc/react";
-import { Product, Visibility } from "@prisma/client";
+import { Product } from "@prisma/client";
 import { RestockProduct } from "../ProductList/RestockProduct";
 import { StockProduct } from "../ProductList/StockProduct";
+import { WarningPopup } from "./WarningPopup";
 
 type Props = {
   categoryId: number;
@@ -46,6 +48,10 @@ export const CategoryProductsTable = ({
   const [restock, setRestock] = useState(false);
   const [stock, setStock] = useState(false);
   const [productId, setProductId] = useState<number | undefined>();
+
+  const [warningOpen, setWarningOpen] = useState(false);
+  const [deleteProductId, setDeleteProductId] = useState<number | undefined>();
+  const toggleWarningOpen = () => setWarningOpen((prev) => !prev);
 
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const toggleId = (id: number) => {
@@ -143,9 +149,9 @@ export const CategoryProductsTable = ({
                   </Button>
 
                   <Button
-                    onClick={async () => {
-                      await deleteProduct(product.id);
-                      onRefetch();
+                    onClick={() => {
+                      setDeleteProductId(product.id);
+                      toggleWarningOpen();
                     }}
                     variant="outline"
                     className="flex flex-row gap-2"
@@ -184,6 +190,19 @@ export const CategoryProductsTable = ({
         onClose={() => {
           onRefetch();
           setStock(false);
+        }}
+      />
+      <WarningPopup
+        text="Opravdu chcete smazat tento produkt?"
+        open={warningOpen}
+        onClose={toggleWarningOpen}
+        onConfirm={async () => {
+          if (deleteProductId) {
+            await deleteProduct(deleteProductId);
+            setDeleteProductId(undefined);
+            toggleWarningOpen();
+            onRefetch();
+          }
         }}
       />
     </div>
