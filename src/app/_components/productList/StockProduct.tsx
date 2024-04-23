@@ -4,14 +4,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { api } from "@/trpc/react";
 import { useState } from "react";
+import { CiWarning } from "react-icons/ci";
 
 type Props = {
   productId?: number;
+  actualQuantity: number;
   open?: boolean;
   onClose: VoidFunction;
 };
 
-export const StockProduct = ({ productId, open, onClose }: Props) => {
+export const StockProduct = ({
+  productId,
+  open,
+  actualQuantity,
+  onClose,
+}: Props) => {
   const { mutateAsync, isLoading } = api.product.stock.useMutation();
 
   const [count, setCount] = useState(0);
@@ -40,6 +47,13 @@ export const StockProduct = ({ productId, open, onClose }: Props) => {
 
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label htmlFor="picture">Počet</Label>
+          {actualQuantity - count < 0 && (
+            <p className="flex flex-row gap-2 text-red-500">
+              <CiWarning size={23} color="red" className="text-red-500" /> Počet
+              produktů na skladu bude v mínusu
+            </p>
+          )}
+
           <Input
             onChange={(e) => setCount(Number(e.target.value))}
             value={count}

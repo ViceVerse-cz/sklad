@@ -31,12 +31,14 @@ export const Action = ({ item, handleDelete }: Props) => {
           {item.product.description || "Neznámý produkt"}
         </p>
         <p className="text-sm text-muted-foreground">
-          {formatDescription(item)}
+          {formatDescription(item)} ({Number(item.product.price)} Kč - kus)
         </p>
       </div>
 
       {handleDelete && (
         <div className="ml-auto font-medium">
+          <p>{Number(item.product.price) * item.quantity} Kč</p>
+
           <Button
             className="ml-4 rounded px-2 py-1"
             onClick={() => handleDelete?.(item)}

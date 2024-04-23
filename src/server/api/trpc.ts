@@ -88,10 +88,19 @@ export const publicProcedure = t.procedure;
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
+export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
+
+  const user = await db.user.findUnique({
+    where: {
+      email: ctx.session.user.email as string,
+    },
+  });
+
+  if (!user?.isAllowed) throw new TRPCError({ code: "UNAUTHORIZED" });
+
   return next({
     ctx: {
       // infers the `session` as non-nullable

@@ -9,7 +9,6 @@ import GoogleProvider from "next-auth/providers/google";
 
 import { env } from "@/env";
 import { db } from "@/server/db";
-import { ALLOWED_EMAILS } from "./constants";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -21,6 +20,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      isAllowed?: boolean;
     } & DefaultSession["user"];
   }
 }
@@ -32,23 +32,11 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    jwt: ({ token, user }) => {
-      if (user) {
-        if (ALLOWED_EMAILS.includes(user.email ?? "")) {
-          return {
-            ...token,
-            userId: user.id,
-          };
-        } else {
-          return {};
-        }
-      }
-      return token;
-    },
-    session: ({ session, token }) => {
+    session: async ({ session, token }) => {
       if (token && session.user) {
         session.user.id = token.userId as string;
       }
+
       return session;
     },
   },

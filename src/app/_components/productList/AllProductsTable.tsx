@@ -20,6 +20,13 @@ import { ProductHistoryDialog } from "./ProductHistoryDialog";
 import { DayPickerProvider } from "react-day-picker";
 import { Product } from "@prisma/client";
 import { EditProductDialog } from "../dashboard/EditProductDialog";
+import { CiWarning } from "react-icons/ci";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const AllProductsTable = () => {
   const [restock, setRestock] = useState(false);
@@ -92,7 +99,14 @@ export const AllProductsTable = () => {
                 <TableRow key={product.id}>
                   <TableCell className="font-medium">{product.name}</TableCell>
                   <TableCell>{String(product.price)} Kč</TableCell>
-                  <TableCell>{product.quantity}</TableCell>
+                  <TableCell>
+                    <div className="flex flex-row items-center justify-center gap-2 align-middle">
+                      {product.quantity}
+                      {product.quantity < 0 && (
+                        <CiWarning size={25} color="red" />
+                      )}
+                    </div>
+                  </TableCell>
                   <TableCell>{product.soldCount}</TableCell>
                   <TableCell>{product.soldPrice} Kč</TableCell>
                   <TableCell>
@@ -156,6 +170,9 @@ export const AllProductsTable = () => {
           onClose={() => setHistoryProductId(undefined)}
         />
         <StockProduct
+          actualQuantity={
+            products?.find((el) => el.id === productId)?.quantity ?? 0
+          }
           productId={productId}
           open={stock}
           onClose={() => {

@@ -75,7 +75,6 @@ export const CategoryProductsTable = ({
   return (
     <div>
       <Table>
-        <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead />
@@ -185,6 +184,9 @@ export const CategoryProductsTable = ({
         }}
       />
       <StockProduct
+        actualQuantity={
+          data?.products.find((el) => el.id === productId)?.quantity ?? 0
+        }
         productId={productId}
         open={stock}
         onClose={() => {
