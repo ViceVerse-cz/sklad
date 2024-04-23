@@ -19,6 +19,9 @@ export const stockProducts = protectedProcedure
           product?.price && {
             price: product.price as unknown as number,
           }),
+        ...(input.date && {
+          date: input.date,
+        }),
         product: {
           connect: {
             id: input.id,

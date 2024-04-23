@@ -10,18 +10,17 @@ import {
 } from "@/components/ui/carousel";
 import { api } from "@/trpc/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CreateCategoryDialog } from "./CreateCategoryDialog";
 import { MenuButton } from "./MenuButton";
 import { WarningPopup } from "./WarningPopup";
+import { AddProductDialog } from "./AddProductDialog";
+import { Product } from "@prisma/client";
 
 export const Overview = () => {
-  const {
-    data,
-    isLoading,
-    refetch: refetchCategories,
-  } = api.category.listCategories.useQuery();
+  const { data, refetch: refetchCategories } =
+    api.category.listCategories.useQuery();
 
   const deleteCategoryMutation = api.category.deleteCategories.useMutation({
     onSuccess: () => refetchCategories(),
@@ -33,15 +32,56 @@ export const Overview = () => {
   const [createCategoryOpen, setCreateCategoryOpen] = useState(false);
   const toggleCreateCategoryOpen = () => setCreateCategoryOpen((prev) => !prev);
 
+  const [createProductOpen, setProductOpen] = useState(false);
+  const [createProduct, setCreateProduct] = useState<Product | undefined>(
+    undefined,
+  );
+  const changeProduct = (
+    field: Exclude<keyof Product, "id">,
+    value: string | number,
+  ) => {
+    setCreateProduct((prev) => {
+      if (!prev) {
+        return {
+          id: 0,
+          name: "",
+          description: null,
+          price: 0,
+          visibility: "PUBLIC",
+          quantity: 0,
+          [field]: value,
+        } as any;
+      }
+      return {
+        ...prev,
+        [field]: value,
+      };
+    });
+
+    console.log(createProduct);
+  };
+  const toggleCreateProductOpen = () => setProductOpen((prev) => !prev);
+  const { mutateAsync: createProductAsync } = api.product.create.useMutation();
+
   return (
     <div className="flex flex-col gap-3">
-      <Button
-        onClick={toggleCreateCategoryOpen}
-        className="w-fit"
-        variant="default"
-      >
-        Přidat kategorii
-      </Button>
+      <div className="flex flex-row gap-3">
+        <Button
+          onClick={toggleCreateCategoryOpen}
+          className="w-fit"
+          variant="default"
+        >
+          Přidat kategorii
+        </Button>
+
+        <Button
+          onClick={toggleCreateProductOpen}
+          className="w-fit"
+          variant="default"
+        >
+          Přidat produkt
+        </Button>
+      </div>
 
       <WarningPopup
         onConfirm={() => {
@@ -89,6 +129,24 @@ export const Overview = () => {
         open={createCategoryOpen}
         onClose={toggleCreateCategoryOpen}
         onSuccess={refetchCategories}
+      />
+      <AddProductDialog
+        open={createProductOpen}
+        onAddProduct={changeProduct}
+        creatingProduct={createProduct}
+        onCreateProduct={() => {
+          if (createProduct) {
+            createProductAsync({
+              ...createProduct,
+              defaultQuantity: createProduct.quantity,
+              description: createProduct.description ?? "Popisek nebyl zadán",
+              price: Number(createProduct.price),
+            });
+
+            setCreateProduct(undefined);
+          }
+        }}
+        onOpenChange={toggleCreateProductOpen}
       />
     </div>
   );

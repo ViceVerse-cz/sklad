@@ -6,7 +6,6 @@ export const createProductSchema = z.object({
   description: z.string(),
   price: z.number(),
   defaultQuantity: z.number(),
-  defaultCategoryId: z.number(),
 });
 
 export const deleteProductSchema = z.number();
@@ -17,6 +16,7 @@ export const stockProductsSchema = z.object({
   id: z.number(),
   quantity: z.number().min(1),
   type: z.nativeEnum(ActionType),
+  date: z.date().optional(),
 });
 
 export const listAllProductsSchema = z.object({

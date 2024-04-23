@@ -21,12 +21,6 @@ import { DayPickerProvider } from "react-day-picker";
 import { Product } from "@prisma/client";
 import { EditProductDialog } from "../dashboard/EditProductDialog";
 import { CiWarning } from "react-icons/ci";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 export const AllProductsTable = () => {
   const [restock, setRestock] = useState(false);

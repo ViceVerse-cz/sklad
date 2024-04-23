@@ -28,7 +28,7 @@ export const Action = ({ item, handleDelete }: Props) => {
 
       <div className="ml-4 space-y-1">
         <p className="text-sm font-medium leading-none">
-          {item.product.description || "Neznámý produkt"}
+          {item.product.name || "Neznámý produkt"}
         </p>
         <p className="text-sm text-muted-foreground">
           {formatDescription(item)} ({Number(item.product.price)} Kč - kus)
@@ -37,8 +37,7 @@ export const Action = ({ item, handleDelete }: Props) => {
 
       {handleDelete && (
         <div className="ml-auto font-medium">
-          <p>{Number(item.product.price) * item.quantity} Kč</p>
-
+          {Number(item.product.price) * item.quantity} Kč
           <Button
             className="ml-4 rounded px-2 py-1"
             onClick={() => handleDelete?.(item)}

@@ -25,6 +25,7 @@ import { Product } from "@prisma/client";
 import { RestockProduct } from "../ProductList/RestockProduct";
 import { StockProduct } from "../ProductList/StockProduct";
 import { WarningPopup } from "./WarningPopup";
+import { ProductHistoryDialog } from "../ProductList/ProductHistoryDialog";
 
 type Props = {
   categoryId: number;
@@ -48,6 +49,9 @@ export const CategoryProductsTable = ({
   const [restock, setRestock] = useState(false);
   const [stock, setStock] = useState(false);
   const [productId, setProductId] = useState<number | undefined>();
+  const [historyProductId, setHistoryProductId] = useState<
+    number | undefined
+  >();
 
   const [warningOpen, setWarningOpen] = useState(false);
   const [deleteProductId, setDeleteProductId] = useState<number | undefined>();
@@ -159,10 +163,7 @@ export const CategoryProductsTable = ({
                   </Button>
 
                   <Button
-                    onClick={() => {
-                      setProductId(product.id);
-                      setRestock(!restock);
-                    }}
+                    onClick={() => setHistoryProductId(product.id)}
                     variant="outline"
                     className="flex flex-row gap-2"
                   >
@@ -175,6 +176,10 @@ export const CategoryProductsTable = ({
         </TableBody>
       </Table>
 
+      <ProductHistoryDialog
+        productId={historyProductId}
+        onClose={() => setHistoryProductId(undefined)}
+      />
       <RestockProduct
         productId={productId}
         open={restock}

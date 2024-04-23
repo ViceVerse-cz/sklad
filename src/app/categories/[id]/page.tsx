@@ -7,7 +7,7 @@ import { RxPencil2 } from "react-icons/rx";
 import { CategoryProductsTable } from "@/app/_components/dashboard/CategoryProductsTable";
 import { useCategory } from "./useCategory";
 import { EditProductDialog } from "@/app/_components/dashboard/EditProductDialog";
-import { AddProductDialog } from "@/app/_components/dashboard/CreateProductDialog";
+import { AddProductDialog } from "@/app/_components/dashboard/AddProductDialog";
 
 export default ({ params }: { params: { id: string } }) => {
   const {
@@ -49,7 +49,7 @@ export default ({ params }: { params: { id: string } }) => {
       <div className="space-x-6">
         <h2 className="inline-block text-xl font-semibold">Produkty</h2>
         <ClientButton className="inline-block" onClick={setCreatingProduct}>
-          Přidat produkt
+          Asociovat produkt
         </ClientButton>
 
         <CategoryProductsTable

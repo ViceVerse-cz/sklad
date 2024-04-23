@@ -15,3 +15,8 @@ export const deleteCategoriesSchema = z.number();
 export const getCategorySchema = z.number();
 
 export const getCategoryStatsSchema = z.number();
+
+export const AssociateProductSchema = z.object({
+  categoryId: z.number(),
+  productId: z.number(),
+});
