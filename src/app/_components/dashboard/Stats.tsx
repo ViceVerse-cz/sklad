@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { api } from "@/trpc/react";
 
 export const Stats = () => {
@@ -12,13 +12,14 @@ export const Stats = () => {
 
   const chartData = monthlyData.map((item) => ({
     name: item.month,
-    // @ts-ignore
     total: parseFloat(item.totalSales),
   }));
 
   return (
     <ResponsiveContainer width="100%" height={350}>
       <BarChart data={chartData}>
+        <CartesianGrid strokeDasharray="2 1" />
+        <Tooltip />
         <XAxis
           dataKey="name"
           stroke="#888888"
