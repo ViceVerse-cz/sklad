@@ -14,6 +14,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CreateCategoryDialog } from "./CreateCategoryDialog";
 import { MenuButton } from "./MenuButton";
+import { WarningPopup } from "./WarningPopup";
 
 export const Overview = () => {
   const {
@@ -25,6 +26,9 @@ export const Overview = () => {
   const deleteCategoryMutation = api.category.deleteCategories.useMutation({
     onSuccess: () => refetchCategories(),
   });
+  const [deletingCategoryId, setDeletingCategoryId] = useState<
+    number | undefined
+  >();
 
   const [createCategoryOpen, setCreateCategoryOpen] = useState(false);
   const toggleCreateCategoryOpen = () => setCreateCategoryOpen((prev) => !prev);
@@ -39,6 +43,18 @@ export const Overview = () => {
         Přidat kategorii
       </Button>
 
+      <WarningPopup
+        onConfirm={() => {
+          if (deletingCategoryId) {
+            deleteCategoryMutation.mutate(deletingCategoryId);
+            setDeletingCategoryId(undefined);
+          }
+        }}
+        onClose={() => setDeletingCategoryId(undefined)}
+        open={!!deletingCategoryId}
+        text="Opravdu chcete smazat kategorii?"
+      />
+
       <Carousel className="w-full">
         <CarouselContent>
           {data?.map((item) => (
@@ -51,7 +67,7 @@ export const Overview = () => {
                     </CardTitle>
                     <MenuButton
                       item={item}
-                      deleteCategory={deleteCategoryMutation.mutate}
+                      deleteCategory={setDeletingCategoryId}
                     />
                   </CardHeader>
                   <CardContent>
