@@ -136,6 +136,7 @@ export const Overview = () => {
         creatingProduct={createProduct}
         onCreateProduct={() => {
           if (createProduct) {
+            // TODO: Refactor this shit
             createProductAsync({
               ...createProduct,
               defaultQuantity: createProduct.quantity,
@@ -144,6 +145,13 @@ export const Overview = () => {
             });
 
             setCreateProduct(undefined);
+            toggleCreateProductOpen();
+
+            // Reset the form
+            changeProduct("name", "");
+            changeProduct("price", 0);
+            changeProduct("quantity", 0);
+            changeProduct("description", "");
           }
         }}
         onOpenChange={toggleCreateProductOpen}

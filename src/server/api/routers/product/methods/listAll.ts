@@ -1,6 +1,6 @@
 import { protectedProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
-import { Visibility } from "@prisma/client";
+import { ProductCategory, Visibility } from "@prisma/client";
 import { listAllProductsSchema } from "../schema";
 
 export const listAll = protectedProcedure
@@ -23,26 +23,49 @@ export const listAll = protectedProcedure
       },
     });
 
-    return products.map((product) => {
-      const productActions = actions.filter(
-        (action) => action.productId === product.id && action.type === "SOLD",
-      );
+    let productCategories: ProductCategory[] | undefined;
 
-      const soldCount = productActions.reduce(
-        (acc, action) => acc + action.quantity,
-        0,
-      );
+    if (input.notShowAssociatedCategoryId) {
+      productCategories = await db.productCategory.findMany({
+        where: {
+          productId: {
+            in: products.map((product) => product.id),
+          },
+          categoryId: input.notShowAssociatedCategoryId,
+        },
+      });
+    }
 
-      const soldPrice = productActions.reduce(
-        (acc, action) =>
-          acc + action.quantity * Number(action.price ?? product.price),
-        0,
-      );
+    return products
+      .map((product) => {
+        const productActions = actions.filter(
+          (action) => action.productId === product.id && action.type === "SOLD",
+        );
 
-      return {
-        ...product,
-        soldCount,
-        soldPrice,
-      };
-    });
+        const soldCount = productActions.reduce(
+          (acc, action) => acc + action.quantity,
+          0,
+        );
+
+        const soldPrice = productActions.reduce(
+          (acc, action) =>
+            acc + action.quantity * Number(action.price ?? product.price),
+          0,
+        );
+
+        return {
+          ...product,
+          soldCount,
+          soldPrice,
+        };
+      })
+      .filter((product) => {
+        if (!productCategories) {
+          return true;
+        }
+
+        return !productCategories.some(
+          (productCategory) => productCategory.productId === product.id,
+        );
+      });
   });

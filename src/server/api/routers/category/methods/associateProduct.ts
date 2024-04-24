@@ -1,38 +1,35 @@
 import { protectedProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
-import { AssociateProductSchema } from "../schema";
+import { z } from "zod";
 
-export const associateProduct = protectedProcedure
-  .input(AssociateProductSchema)
+const AssociateProductsSchema = z.object({
+  categoryId: z.number(),
+  productIds: z.array(z.number()),
+});
+
+export const associateProducts = protectedProcedure
+  .input(AssociateProductsSchema)
   .mutation(async ({ input }) => {
-    const product = await db.product.findUnique({
-      where: { id: input.productId },
-    });
-
-    if (!product) {
-      throw new Error("Product not found");
-    }
-
     const category = await db.category.findUnique({
-      where: { id: input.categoryId },
+      where: { id: Number(input.categoryId) },
     });
 
     if (!category) {
       throw new Error("Category not found");
     }
 
-    return db.productCategory.create({
-      data: {
-        product: {
-          connect: {
-            id: input.productId,
-          },
-        },
-        category: {
-          connect: {
-            id: input.categoryId,
-          },
-        },
-      },
+    const products = await db.product.findMany({
+      where: { id: { in: input.productIds } },
+    });
+
+    if (products.length !== input.productIds.length) {
+      throw new Error("One or more products not found");
+    }
+
+    await db.productCategory.createMany({
+      data: input.productIds.map((productId) => ({
+        categoryId: Number(input.categoryId),
+        productId: productId,
+      })),
     });
   });

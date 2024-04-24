@@ -8,6 +8,9 @@ import { CategoryProductsTable } from "@/app/_components/dashboard/CategoryProdu
 import { useCategory } from "./useCategory";
 import { EditProductDialog } from "@/app/_components/dashboard/EditProductDialog";
 import { AddProductDialog } from "@/app/_components/dashboard/AddProductDialog";
+import { AssociatingProductDialog } from "@/app/_components/dashboard/AssociatingProductDialog";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export default ({ params }: { params: { id: string } }) => {
   const {
@@ -23,6 +26,9 @@ export default ({ params }: { params: { id: string } }) => {
     data,
     refetchCategory,
   } = useCategory(Number(params.id));
+
+  const [associatingProduct, setAssociatingProduct] = useState<boolean>();
+  const toggleAssociatingProduct = () => setAssociatingProduct((prev) => !prev);
 
   return (
     <div className="space-y-8">
@@ -48,9 +54,9 @@ export default ({ params }: { params: { id: string } }) => {
 
       <div className="space-x-6">
         <h2 className="inline-block text-xl font-semibold">Produkty</h2>
-        <ClientButton className="inline-block" onClick={setCreatingProduct}>
+        <Button className="inline-block" onClick={toggleAssociatingProduct}>
           Asociovat produkt
-        </ClientButton>
+        </Button>
 
         <CategoryProductsTable
           data={data}
@@ -74,6 +80,15 @@ export default ({ params }: { params: { id: string } }) => {
         editingProduct={editingProduct}
         onChangeProduct={changeProduct}
         onEditProduct={onEditProduct}
+      />
+
+      <AssociatingProductDialog
+        categoryId={Number(params.id)}
+        onSuccess={() => {
+          refetchCategory();
+        }}
+        product={associatingProduct}
+        onClose={toggleAssociatingProduct}
       />
     </div>
   );

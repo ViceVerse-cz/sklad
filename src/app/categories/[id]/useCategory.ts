@@ -9,6 +9,7 @@ export const useCategory = (categoryId: number) => {
 
   const [editingProduct, setEditingProduct] = useState<Product | undefined>();
   const [creatingProduct, setCreatingProduct] = useState<Product | undefined>();
+  const [associatingProduct, setAssociatingProduct] = useState<boolean>(false);
 
   const addProduct = useCallback(
     <T>(property: keyof Product & string, value: T) => {
@@ -51,7 +52,6 @@ export const useCategory = (categoryId: number) => {
       price: Number(creatingProduct.price),
       defaultQuantity: creatingProduct.quantity,
       description: creatingProduct.description ?? "Popisek nezadán",
-      defaultCategoryId: categoryId,
     });
 
     refetchCategory();
@@ -80,6 +80,8 @@ export const useCategory = (categoryId: number) => {
     createProduct,
     creatingProduct,
     setCreatingProduct,
+    associatingProduct,
+    setAssociatingProduct,
     onCreateProduct,
     addProduct,
     stats,

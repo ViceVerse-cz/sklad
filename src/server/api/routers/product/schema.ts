@@ -26,6 +26,7 @@ export const listAllProductsSchema = z.object({
       to: z.date().optional(),
     })
     .optional(),
+  notShowAssociatedCategoryId: z.number().optional(),
 });
 
 export const listAllQueryInput = z.number().min(1);
