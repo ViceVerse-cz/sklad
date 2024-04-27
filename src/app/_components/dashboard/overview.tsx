@@ -108,7 +108,7 @@ export const Overview = () => {
       <Carousel className="w-full">
         <CarouselContent>
           {data?.map((item: any) => (
-            <CarouselItem className="w-[300px]" key={item.id}>
+            <CarouselItem className="md:w-1/3 sm:w-1/2 w-full" key={item.id}>
               <Link href={`categories/${item.id}`}>
                 <Card className="hover:cursor-pointer hover:bg-gray-50">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
