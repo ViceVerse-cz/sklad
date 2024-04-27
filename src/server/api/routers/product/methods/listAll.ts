@@ -39,9 +39,9 @@ export const listAll = protectedProcedure
     return products
       .map((product) => {
         const productActions = actions.filter(
-          (action) => action.productId === product.id && action.type === "SOLD",
+          (action) => action.productId === product.id && action.type === "SOLD" && action.visibility === "Visible",
         );
-
+        
         const soldCount = productActions.reduce(
           (acc, action) => acc + action.quantity,
           0,

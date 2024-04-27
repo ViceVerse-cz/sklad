@@ -58,6 +58,7 @@ export const ProductHistoryDialog = ({
       dateRange: dateRange,
     },
     {
+      refetchOnWindowFocus: false,
       onSuccess: onLoadMoreProducts,
     },
   );
