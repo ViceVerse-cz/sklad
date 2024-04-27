@@ -22,7 +22,7 @@ export const listLastActions = protectedProcedure
               gte: input.from,
               lte: input.to,
             },
-            visibility: Visibility.Visible
+            visibility: Visibility.Visible,
           },
           include: {
             product: true,

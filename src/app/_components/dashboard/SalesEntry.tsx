@@ -39,6 +39,7 @@ export interface ActionHistory {
   date: Date;
   product: Product;
   productId: number;
+  price?: number;
 }
 
 export function SalesEntry({

@@ -50,6 +50,9 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  pages: {
+    newUser: "/overview",
+  },
 };
 
 /**

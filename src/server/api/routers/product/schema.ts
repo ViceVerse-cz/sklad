@@ -40,6 +40,12 @@ export const listAllActionsInput = z.object({
 export const listActionsInput = z.object({
   page: z.number().min(1),
   productId: z.number(),
+  dateRange: z
+    .object({
+      from: z.date().optional(),
+      to: z.date().optional(),
+    })
+    .optional(),
 });
 
 export const deleteManySchema = z.array(z.number());

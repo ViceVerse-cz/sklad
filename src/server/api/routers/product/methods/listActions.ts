@@ -18,6 +18,10 @@ export const listActions = protectedProcedure
         where: {
           productId: input.productId,
           visibility: Visibility.Visible,
+          date: {
+            gte: input.dateRange?.from,
+            lte: input.dateRange?.to,
+          },
         },
         include: {
           product: true,

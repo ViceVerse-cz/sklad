@@ -17,8 +17,11 @@ import { MenuButton } from "./MenuButton";
 import { WarningPopup } from "./WarningPopup";
 import { AddProductDialog } from "./AddProductDialog";
 import { Product } from "@prisma/client";
+import { useToast } from "@/components/ui/use-toast";
 
 export const Overview = () => {
+  const { toast } = useToast();
+
   const { data, refetch: refetchCategories } =
     api.category.listCategories.useQuery();
 
@@ -61,7 +64,14 @@ export const Overview = () => {
     console.log(createProduct);
   };
   const toggleCreateProductOpen = () => setProductOpen((prev) => !prev);
-  const { mutateAsync: createProductAsync } = api.product.create.useMutation();
+  const { mutateAsync: createProductAsync } = api.product.create.useMutation({
+    onSuccess: () => {
+      toast({
+        title: "Produkt vytvořen",
+        description: "Produkt byl úspěšně vytvořen.",
+      });
+    },
+  });
 
   return (
     <div className="flex flex-col gap-3">
@@ -97,8 +107,8 @@ export const Overview = () => {
 
       <Carousel className="w-full">
         <CarouselContent>
-          {data?.map((item) => (
-            <CarouselItem key={item.id}>
+          {data?.map((item: any) => (
+            <CarouselItem className="w-[300px]" key={item.id}>
               <Link href={`categories/${item.id}`}>
                 <Card className="hover:cursor-pointer hover:bg-gray-50">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

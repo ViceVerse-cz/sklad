@@ -20,26 +20,34 @@ const formatDescription = (item: ActionHistory) => {
 
 export const Action = ({ item, handleDelete }: Props) => {
   return (
-    <div key={item.id} className="flex items-center">
-      <Avatar className="h-9 w-9">
-        <AvatarImage src="/avatars/01.png" alt="Avatar" />
-        <AvatarFallback>{item.type === "RESTOCK" ? "+" : "-"}</AvatarFallback>
-      </Avatar>
+    <div key={item.id} className="flex flex-row items-center gap-2">
+      <div className="flex w-2/3 flex-row gap-1">
+        <Avatar className="h-9 w-9">
+          <AvatarImage src="/avatars/01.png" alt="Avatar" />
+          <AvatarFallback>{item.type === "RESTOCK" ? "+" : "-"}</AvatarFallback>
+        </Avatar>
 
-      <div className="ml-4 space-y-1">
-        <p className="text-sm font-medium leading-none">
-          {item.product.name || "Neznámý produkt"}
-        </p>
-        <p className="text-sm text-muted-foreground">
-          {formatDescription(item)} ({Number(item.product.price)} Kč - kus)
-        </p>
+        <div className="ml-4 space-y-1">
+          <p className="text-sm font-medium leading-none">
+            {item.product.name || "Neznámý produkt"}
+          </p>
+          <p className="text-sm text-muted-foreground">
+            {formatDescription(item)} ({Number(item.product.price)} Kč - kus)
+          </p>
+        </div>
       </div>
 
       {handleDelete && (
-        <div className="ml-auto font-medium">
-          {Number(item.product.price) * item.quantity} Kč
+        <div className="ml-auto flex flex-row gap-2 font-medium">
+          <span className="text-md">
+            {(
+              Number((item as any).price ?? item.product.price) * item.quantity
+            ).toFixed(2)}{" "}
+            Kč
+          </span>
+
           <Button
-            className="ml-4 rounded px-2 py-1"
+            className="mx-auto mr-0 w-fit rounded px-2 py-1"
             onClick={() => handleDelete?.(item)}
           >
             Smazat

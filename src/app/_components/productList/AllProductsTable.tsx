@@ -161,6 +161,7 @@ export const AllProductsTable = () => {
         />
         <ProductHistoryDialog
           productId={historyProductId}
+          dateRange={date}
           onClose={() => setHistoryProductId(undefined)}
         />
         <StockProduct

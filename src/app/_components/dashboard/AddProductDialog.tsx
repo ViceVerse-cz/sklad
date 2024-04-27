@@ -2,7 +2,6 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import Input from "@/app/_components/Popup/Input";
 import { Button } from "@/components/ui/button";
 import { Product } from "@prisma/client";
-import { useEffect } from "react";
 
 type FormData = Exclude<keyof Product, "id">;
 

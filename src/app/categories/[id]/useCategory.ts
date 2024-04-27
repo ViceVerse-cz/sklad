@@ -1,8 +1,11 @@
 import { useState, useCallback } from "react";
 import { api } from "@/trpc/react";
 import { Product } from "@prisma/client";
+import { useToast } from "@/components/ui/use-toast";
 
 export const useCategory = (categoryId: number) => {
+  const { toast } = useToast();
+
   const { data: stats } = api.category.getStats.useQuery(categoryId);
   const { data, refetch: refetchCategory } =
     api.category.getCategory.useQuery(categoryId);

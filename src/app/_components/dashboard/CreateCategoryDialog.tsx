@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import { useState } from "react";
 import Select from "react-select";
+import { Category, Product } from "@prisma/client";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 type Props = {
   open?: boolean;
@@ -17,14 +20,31 @@ type NewCategory = {
 };
 
 export const CreateCategoryDialog = ({ open, onClose, onSuccess }: Props) => {
+  const { toast } = useToast();
+
   const { mutateAsync: createCategory } =
     api.category.createCategory.useMutation({
-      onSuccess: (data) => {
-        window.location.href = `/categories/${data.id}`;
+      onSuccess: (data: Category) => {
+        toast({
+          title: "Kategorie vytvořena",
+          description: "Kategorie byla úspěšně vytvořena.",
+          action: (
+            <ToastAction
+              onClick={() => {
+                window.location.href = "/categories/" + data.id;
+              }}
+              altText="Přejít na kategorii"
+            >
+              Přejít na kategorii
+            </ToastAction>
+          ),
+        });
       },
     });
   const { data: products, isLoading: productsLoading } =
-    api.product.listAll.useQuery();
+    api.product.listAll.useQuery({
+      notShowAssociatedCategoryId: 0,
+    });
 
   const [newData, setNewData] = useState<NewCategory>({
     name: "Nová kategorie",
@@ -50,7 +70,7 @@ export const CreateCategoryDialog = ({ open, onClose, onSuccess }: Props) => {
   return (
     <Dialog
       open={open}
-      onOpenChange={(value) => {
+      onOpenChange={(value: boolean) => {
         if (!value) onClose();
       }}
     >
@@ -76,14 +96,14 @@ export const CreateCategoryDialog = ({ open, onClose, onSuccess }: Props) => {
               closeMenuOnSelect={false}
               isMulti
               placeholder="Vyberte produkty"
-              options={products?.map((item) => ({
+              options={products?.map((item: Product) => ({
                 value: item.id,
                 label: item.name,
               }))}
               onChange={(selected) => {
                 onNewDataChange(
                   "productIds",
-                  selected.map((item) => item.value),
+                  selected.map((item: any) => item.value),
                 );
               }}
             />

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { MainNav } from "./_components/dashboard/MainNav";
 import { getServerAuthSession } from "@/server/auth";
 import { redirect } from "next/navigation";
+import { Toaster } from "@/components/ui/toaster";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -37,6 +38,7 @@ export default async function RootLayout({
         <TRPCReactProvider>
           <div className={"px-8 pt-8"}>
             <MainNav />
+            <Toaster />
 
             {children}
           </div>
