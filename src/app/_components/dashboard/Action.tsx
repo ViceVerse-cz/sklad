@@ -32,26 +32,32 @@ export const Action = ({ item, handleDelete }: Props) => {
             {item.product.name || "Neznámý produkt"}
           </p>
           <p className="text-sm text-muted-foreground">
-            {formatDescription(item)} ({Number(item.product.price)} Kč - kus)
+            {formatDescription(item)}
+
+            {item.type === "SOLD" &&
+              `${item.quantity} x ${item.product.price} Kč`}
           </p>
         </div>
       </div>
 
       {handleDelete && (
         <div className="ml-auto flex flex-row gap-2 font-medium">
-          <span className="text-md">
-            {(
-              Number((item as any).price ?? item.product.price) * item.quantity
-            ).toFixed(2)}{" "}
-            Kč
-          </span>
+          {item.type === "SOLD" && (
+            <span className="text-md">
+              {(
+                Number((item as any).price ?? item.product.price) *
+                item.quantity
+              ).toFixed(2)}{" "}
+              Kč
+            </span>
+          )}
 
           <Button
-            className="mx-auto mr-0 w-fit rounded px-2 py-1"
+            type="button"
+            className="mx-auto mr-0 size-10 rounded bg-red-600 px-2 py-1"
             onClick={() => handleDelete?.(item)}
           >
-            Smazat
-            <RxTrash />
+            <RxTrash size={20} />
           </Button>
         </div>
       )}
