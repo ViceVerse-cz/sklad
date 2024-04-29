@@ -30,7 +30,7 @@ export const CreateCategoryDialog = ({ open, onClose, onSuccess }: Props) => {
         action: (
           <ToastAction
             onClick={() => {
-              window.location.href = "/categories/" + data.id;
+              window.location.href = `/categories/${data.id}`;
             }}
             altText="Přejít na kategorii"
           >
