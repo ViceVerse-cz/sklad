@@ -18,6 +18,7 @@ export const getCategory = protectedProcedure.input(getCategorySchema).query(asy
 
   const productActions = await db.actionHistory.findMany({
     where: {
+      visibility: Visibility.Visible,
       productId: {
         in: productCategories.map((productCategory) => productCategory.productId),
       },
