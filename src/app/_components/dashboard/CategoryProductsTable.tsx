@@ -7,10 +7,10 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { useState } from "react";
 import { api } from "@/trpc/react";
 import { Product } from "@prisma/client";
-import { RestockProduct } from "../ProductList/RestockProduct";
-import { StockProduct } from "../ProductList/StockProduct";
+import { RestockProduct } from "../productList/RestockProduct";
+import { StockProduct } from "../productList/StockProduct";
 import { WarningPopup } from "./WarningPopup";
-import { ProductHistoryDialog } from "../ProductList/ProductHistoryDialog";
+import { ProductHistoryDialog } from "../productList/ProductHistoryDialog";
 
 type Props = {
   categoryId: number;
@@ -154,7 +154,11 @@ export const CategoryProductsTable = ({ data, onRefetch, onSetEditingProduct }: 
         </TableBody>
       </Table>
 
-      <ProductHistoryDialog productId={historyProductId} onClose={() => setHistoryProductId(undefined)} />
+      <ProductHistoryDialog
+        productId={historyProductId}
+        onClose={() => setHistoryProductId(undefined)}
+        dateRange={undefined}
+      />
       <RestockProduct
         productId={productId}
         open={restock}

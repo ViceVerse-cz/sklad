@@ -12,7 +12,7 @@ export const Stats = () => {
 
   const chartData = monthlyData.map((item) => ({
     name: item.month,
-    total: parseFloat(item.totalSales),
+    total: item.totalSales,
   }));
 
   return (

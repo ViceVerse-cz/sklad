@@ -75,7 +75,7 @@ export default ({ params }: { params: { id: string } }) => {
         onSuccess={() => {
           refetchCategory();
         }}
-        product={associatingProduct}
+        product={associatingProduct ?? false}
         onClose={toggleAssociatingProduct}
       />
     </div>
