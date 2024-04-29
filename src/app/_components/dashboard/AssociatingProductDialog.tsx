@@ -22,7 +22,7 @@ export const AssociatingProductDialog = ({ categoryId, product, onClose, onSucce
   });
   const { mutateAsync: associateProducts } = api.category.associateProducts.useMutation();
 
-  const [selectedProducts, setSelectedProducts] = useState<string[]>();
+  const [selectedProducts, setSelectedProducts] = useState<number[]>();
 
   const onAssociateProduct = async () => {
     if (!selectedProducts) return;
@@ -55,7 +55,7 @@ export const AssociatingProductDialog = ({ categoryId, product, onClose, onSucce
           }))}
           onChange={(selected) => {
             setSelectedProducts(
-              (selected as unknown as { label: string; value: string }[]).map((product) => product.value),
+              (selected as unknown as { label: string; value: number }[]).map((product) => product.value),
             );
           }}
           isLoading={productsLoading}
