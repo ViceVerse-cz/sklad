@@ -22,11 +22,11 @@ export const WarningPopup = ({ onClose, onConfirm, text, open }: Props) => {
         <p>{text}</p>
 
         <DialogFooter className="flex flex-row gap-4">
-          <Button variant="default" onClick={onConfirm}>
+          <Button variant="destructive" onClick={onConfirm}>
             Ano
           </Button>
 
-          <Button variant="destructive" onClick={onClose}>
+          <Button variant="default" onClick={onClose}>
             Zrušit
           </Button>
         </DialogFooter>

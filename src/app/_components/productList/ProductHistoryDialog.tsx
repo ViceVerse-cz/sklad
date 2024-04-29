@@ -1,11 +1,12 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { useRef, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import { Action } from "../dashboard/Action";
 import { ActionHistory } from "../dashboard/SalesEntry";
 import { Button } from "@/components/ui/button";
 import { PaginatedResult } from "prisma-pagination";
 import { api } from "@/trpc/react";
 import { DateRange } from "react-day-picker";
+import { WarningPopup } from "../dashboard/WarningPopup";
 
 type Props = {
   productId?: number | undefined;
@@ -15,6 +16,7 @@ type Props = {
 
 export const ProductHistoryDialog = ({ productId, onClose, dateRange }: Props) => {
   const scrollableContainer = useRef<HTMLDivElement>(null);
+  const [warningOpen, setWarningOpen] = useState(false);
 
   const [page, setPage] = useState(1);
   const [actions, setActions] = useState<ActionHistory[]>([]);
@@ -47,7 +49,11 @@ export const ProductHistoryDialog = ({ productId, onClose, dateRange }: Props) =
     scrollContainer();
   };
 
-  const { data, isLoading: actionsLoading } = api.product.listActions.useQuery(
+  const {
+    data,
+    isLoading: actionsLoading,
+    refetch,
+  } = api.product.listActions.useQuery(
     {
       productId: productId ?? 0,
       page,
@@ -59,11 +65,20 @@ export const ProductHistoryDialog = ({ productId, onClose, dateRange }: Props) =
     },
   );
 
-  const { mutateAsync: deleteAction } = api.product.deleteAction.useMutation();
-  const handleDeleteAction = async (action: ActionHistory) => {
-    await deleteAction(action.id);
+  const [deletingAction, setDeletingAction] = useState<ActionHistory | null>(null);
+  const handleDeleteOpen = (action: ActionHistory) => {
+    setDeletingAction(action);
+    setWarningOpen(!warningOpen);
+  };
 
-    setActions((prevActions) => prevActions.filter((item) => item.id !== action.id));
+  const { mutateAsync: deleteAction } = api.product.deleteAction.useMutation();
+
+  const handleDeleteAction = async () => {
+    if (deletingAction) {
+      await deleteAction(deletingAction.id);
+      setActions((prevActions) => prevActions.filter((item) => item.id !== deletingAction?.id));
+      setWarningOpen(!warningOpen);
+    }
   };
 
   return (
@@ -71,13 +86,16 @@ export const ProductHistoryDialog = ({ productId, onClose, dateRange }: Props) =
       <DialogContent className="min-w-[700px]">
         <h1 className="mt-[-10px] text-xl font-bold">Historie produktu</h1>
 
-        <div ref={scrollableContainer} className="h-80 overflow-scroll">
-          <div className="mt-7 flex flex-col gap-7 overflow-scroll">
-            {actions.map((item) => (
-              <Action handleDelete={handleDeleteAction} item={item as ActionHistory} />
-            ))}
+        <Suspense fallback="Loading">
+          {actions.length === 0 && <p className="mt-4">Nenalezena žádná historie</p>}
+          <div ref={scrollableContainer} className="h-80 overflow-scroll">
+            <div className="mt-7 flex flex-col gap-7 overflow-scroll">
+              {actions.map((item) => (
+                <Action handleDelete={handleDeleteOpen} item={item as ActionHistory} />
+              ))}
+            </div>
           </div>
-        </div>
+        </Suspense>
 
         {data?.meta.next && (
           <Button className="mt-4 w-fit" type="button" onClick={increasePage} disabled={actionsLoading}>
@@ -85,6 +103,12 @@ export const ProductHistoryDialog = ({ productId, onClose, dateRange }: Props) =
           </Button>
         )}
       </DialogContent>
+      <WarningPopup
+        text="Opravdu chcete smazat tuto akci?"
+        open={warningOpen}
+        onClose={() => setWarningOpen(!warningOpen)}
+        onConfirm={handleDeleteAction}
+      />
     </Dialog>
   );
 };

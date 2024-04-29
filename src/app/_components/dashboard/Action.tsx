@@ -38,16 +38,10 @@ export const Action = ({ item, handleDelete }: Props) => {
       {handleDelete && (
         <div className="ml-auto flex flex-row gap-2 font-medium">
           {item.type === "SOLD" && (
-            <span className="text-md">
-              {(Number((item as any).price ?? item.product.price) * item.quantity).toFixed(2)} Kč
-            </span>
+            <span className="text-md">{(Number(item.price ?? item.product.price) * item.quantity).toFixed(2)} Kč</span>
           )}
 
-          <Button
-            type="button"
-            className="mx-auto mr-0 size-10 rounded bg-red-600 px-2 py-1"
-            onClick={() => handleDelete?.(item)}
-          >
+          <Button type="button" className="mx-auto mr-0 size-10 rounded px-2 py-1" onClick={() => handleDelete?.(item)}>
             <RxTrash size={20} />
           </Button>
         </div>
