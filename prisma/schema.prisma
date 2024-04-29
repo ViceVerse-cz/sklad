@@ -58,19 +58,19 @@ model VerificationToken {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String?
-  price       Decimal
-  visibility  Visibility @default(Visible)
-  quantity    Int
-  actions     ActionHistory[]
+  id                Int               @id @default(autoincrement())
+  name              String
+  description       String?
+  price             Float
+  visibility        Visibility        @default(Visible)
+  quantity          Int
+  actions           ActionHistory[]
   productCategories ProductCategory[]
 }
 
 model Category {
-  id           Int          @id @default(autoincrement())
-  name         String
+  id                Int               @id @default(autoincrement())
+  name              String
   productCategories ProductCategory[]
 }
 
@@ -84,12 +84,12 @@ model ProductCategory {
 }
 
 model ActionHistory {
-  id         Int      @id @default(autoincrement())
+  id         Int        @id @default(autoincrement())
   type       ActionType
   quantity   Int
   price      Int?
-  date       DateTime @default(now())
-  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  date       DateTime   @default(now())
+  product    Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId  Int
   visibility Visibility @default(Visible)
 }

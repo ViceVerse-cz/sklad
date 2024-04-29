@@ -86,16 +86,18 @@ export const ProductHistoryDialog = ({ productId, onClose, dateRange }: Props) =
       <DialogContent className="min-w-[700px]">
         <h1 className="mt-[-10px] text-xl font-bold">Historie produktu</h1>
 
-        <Suspense fallback="Loading">
-          {actions.length === 0 && <p className="mt-4">Nenalezena žádná historie</p>}
-          <div ref={scrollableContainer} className="h-80 overflow-scroll">
-            <div className="mt-7 flex flex-col gap-7 overflow-scroll">
-              {actions.map((item) => (
-                <Action handleDelete={handleDeleteOpen} item={item as ActionHistory} />
-              ))}
-            </div>
-          </div>
-        </Suspense>
+        <div ref={scrollableContainer} className="h-80 overflow-scroll">
+          {!actionsLoading && (
+            <>
+              {actions.length === 0 && <p className="mt-4">Nenalezena žádná historie</p>}
+              <div className="mt-7 flex flex-col gap-7 overflow-scroll">
+                {actions.map((item) => (
+                  <Action handleDelete={handleDeleteOpen} item={item as ActionHistory} />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
 
         {data?.meta.next && (
           <Button className="mt-4 w-fit" type="button" onClick={increasePage} disabled={actionsLoading}>

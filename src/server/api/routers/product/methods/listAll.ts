@@ -14,15 +14,14 @@ export const listAll = protectedProcedure.input(listAllProductsSchema).query(asy
         in: products.map((product) => product.id),
       },
       date: {
-        lte: input.dateRange?.to,
         gte: input.dateRange?.from,
+        lt: input.dateRange?.to ? new Date(input.dateRange.to.setHours(24, 0, 0)) : undefined,
       },
       visibility: Visibility.Visible,
     },
   });
 
   let productCategories: ProductCategory[] | undefined;
-
   if (input.notShowAssociatedCategoryId) {
     productCategories = await db.productCategory.findMany({
       where: {
@@ -39,11 +38,9 @@ export const listAll = protectedProcedure.input(listAllProductsSchema).query(asy
       const productActions = actions.filter(
         (action) => action.productId === product.id && action.type === "SOLD" && action.visibility === "Visible",
       );
-
       const soldCount = productActions.reduce((acc, action) => acc + action.quantity, 0);
-
       const soldPrice = productActions.reduce(
-        (acc, action) => acc + action.quantity * Number(action.price ?? product.price),
+        (acc, action) => acc + action.quantity * (action.price ?? product.price),
         0,
       );
 
@@ -57,7 +54,6 @@ export const listAll = protectedProcedure.input(listAllProductsSchema).query(asy
       if (!productCategories) {
         return true;
       }
-
       return !productCategories.some((productCategory) => productCategory.productId === product.id);
     });
 });

@@ -47,7 +47,7 @@ export const Overview = () => {
       };
     });
 
-    console.log(createProduct);
+    // console.log(createProduct);
   };
   const toggleCreateProductOpen = () => setProductOpen((prev) => !prev);
   const { mutateAsync: createProductAsync } = api.product.create.useMutation({
@@ -122,7 +122,7 @@ export const Overview = () => {
               ...createProduct,
               defaultQuantity: createProduct.quantity,
               description: createProduct.description ?? "Popisek nebyl zadán",
-              price: Number(createProduct.price),
+              price: createProduct.price,
             });
 
             setCreateProduct(undefined);

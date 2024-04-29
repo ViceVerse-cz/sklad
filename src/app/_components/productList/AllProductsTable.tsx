@@ -32,13 +32,25 @@ export const AllProductsTable = () => {
   const { mutateAsync: editProduct } = api.product.edit.useMutation();
   const onEditProduct = async () => {
     if (editingProduct) {
-      // TODO: Problem with prisma decimal here, not enough time to fit it
-      editingProduct.price = Number(editingProduct.price) as any;
-      await editProduct(editingProduct as any);
+      await editProduct({
+        id: editingProduct.id,
+        name: editingProduct.name,
+        price: editingProduct.price,
+      });
       setEditingProduct(null);
       refetchProducts();
     }
   };
+
+  const { mutateAsync: deleteProduct } = api.product.delete.useMutation();
+  const onDeleteProduct = async () => {
+    if (editingProduct) {
+      await deleteProduct(editingProduct.id);
+      setEditingProduct(null);
+      refetchProducts();
+    }
+  };
+
   const onChangeEditProduct = (field: "name" | "price", value: string | number) => {
     setEditingProduct((prev) => {
       if (!prev) return null;
@@ -65,9 +77,9 @@ export const AllProductsTable = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">Jméno</TableHead>
+              <TableHead>Jméno</TableHead>
               <TableHead>Cena</TableHead>
-              <TableHead>Počet</TableHead>
+              <TableHead>Sklad</TableHead>
               <TableHead>Celkem prodáno</TableHead>
               <TableHead>Celkem prodáno za</TableHead>
               <TableHead />
@@ -77,15 +89,15 @@ export const AllProductsTable = () => {
           <TableBody>
             {products?.map((product: Product & { soldCount: number; soldPrice: number }) => (
               <TableRow key={product.id}>
-                <TableCell className="font-medium">{product.name}</TableCell>
+                <TableCell className="font-medium w-[250px]">{product.name}</TableCell>
                 <TableCell>{String(product.price)} Kč</TableCell>
                 <TableCell>
-                  <div className="flex flex-row items-center justify-center gap-2 align-middle">
-                    {product.quantity}
+                  <>
+                    {product.quantity} ks.
                     {product.quantity < 0 && <CiWarning size={25} color="red" />}
-                  </div>
+                  </>
                 </TableCell>
-                <TableCell>{product.soldCount}</TableCell>
+                <TableCell>{product.soldCount} ks.</TableCell>
                 <TableCell>{product.soldPrice} Kč</TableCell>
                 <TableCell>
                   <div className="flex flex-row gap-3">
@@ -141,6 +153,7 @@ export const AllProductsTable = () => {
           editingProduct={editingProduct}
           onChangeProduct={onChangeEditProduct}
           onEditProduct={onEditProduct}
+          onDeleteProduct={onDeleteProduct}
         />
         <ProductHistoryDialog
           productId={historyProductId}

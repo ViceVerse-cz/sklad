@@ -44,7 +44,7 @@ export const useCategory = (categoryId: number) => {
 
     await createProduct({
       name: creatingProduct.name,
-      price: Number(creatingProduct.price),
+      price: creatingProduct.price,
       defaultQuantity: creatingProduct.quantity,
       description: creatingProduct.description ?? "Popisek nezadán",
     });
@@ -59,7 +59,7 @@ export const useCategory = (categoryId: number) => {
     await editProduct({
       id: editingProduct.id,
       name: editingProduct.name,
-      price: Number(editingProduct.price),
+      price: editingProduct.price,
     });
 
     refetchCategory();

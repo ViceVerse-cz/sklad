@@ -18,7 +18,7 @@ export const listLastActions = protectedProcedure.input(listAllActionsInput).que
         where: {
           date: {
             gte: input.from,
-            lte: input.to,
+            lt: input.to ? new Date(input.to.setHours(24, 0, 0)) : undefined,
           },
           visibility: Visibility.Visible,
         },

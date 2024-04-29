@@ -18,7 +18,7 @@ export const listActions = protectedProcedure.input(listActionsInput).query(asyn
         visibility: Visibility.Visible,
         date: {
           gte: input.dateRange?.from,
-          lte: input.dateRange?.to,
+          lt: input.dateRange?.to ? new Date(input.dateRange.to.setHours(24, 0, 0)) : undefined,
         },
       },
       include: {

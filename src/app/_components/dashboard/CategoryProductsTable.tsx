@@ -36,65 +36,27 @@ export const CategoryProductsTable = ({ data, onRefetch, onSetEditingProduct }: 
   const [deleteProductId, setDeleteProductId] = useState<number | undefined>();
   const toggleWarningOpen = () => setWarningOpen((prev) => !prev);
 
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const toggleId = (id: number) => {
-    if (selectedIds.includes(id)) {
-      setSelectedIds(selectedIds.filter((i) => i !== id));
-    } else {
-      setSelectedIds([...selectedIds, id]);
-    }
-  };
-  const isSelectedId = (id: number) => selectedIds.includes(id);
-
-  const { mutateAsync: deleteManyProducts, isLoading } = api.product.deleteMany.useMutation();
   const { mutateAsync: deleteProduct } = api.product.delete.useMutation();
-  const onDeleteSelected = async () => {
-    await deleteManyProducts(selectedIds);
-    setSelectedIds([]);
-    onRefetch();
-  };
 
   return (
     <div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead />
-            <TableHead className="w-[100px]">Jméno</TableHead>
+            <TableHead className="w-[250px]">Jméno</TableHead>
             <TableHead>Cena</TableHead>
-            <TableHead>Počet</TableHead>
+            <TableHead>Sklad</TableHead>
             <TableHead>Celkem prodáno</TableHead>
             <TableHead>Celkem prodáno za</TableHead>
-            <TableHead>
-              {selectedIds.length > 0 && (
-                <Button
-                  {...(isLoading && { disabled: true })}
-                  className="flex flex-row gap-2"
-                  onClick={onDeleteSelected}
-                >
-                  {isLoading && <RxReload className="animate-spin" />}
-                  Smazat vybrané
-                </Button>
-              )}
-            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {data?.products.map((product) => (
             <TableRow key={product.id}>
-              <TableCell>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    checked={isSelectedId(product.id)}
-                    onCheckedChange={() => toggleId(product.id)}
-                    id="terms"
-                  />
-                </div>
-              </TableCell>
               <TableCell className="font-medium">{product.name}</TableCell>
               <TableCell>{String(product.price)} Kč</TableCell>
-              <TableCell>{product.quantity}</TableCell>
-              <TableCell>{product.soldCount}</TableCell>
+              <TableCell>{product.quantity} ks.</TableCell>
+              <TableCell>{product.soldCount} ks.</TableCell>
               <TableCell>{product.soldPrice} Kč</TableCell>
               <TableCell className="flex flex-row gap-1.5">
                 <Button

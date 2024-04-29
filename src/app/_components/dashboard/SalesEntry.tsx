@@ -1,4 +1,3 @@
-import { Decimal } from "@prisma/client/runtime/library";
 import { api } from "@/trpc/react";
 import { Action } from "./Action";
 import { WarningPopup } from "./WarningPopup";
@@ -13,7 +12,7 @@ export interface Product {
   id: number;
   name: string;
   description?: string;
-  price: Decimal;
+  price: number;
   quantity: number;
   actions: ActionHistory[];
   productCategories: ProductCategory[];
