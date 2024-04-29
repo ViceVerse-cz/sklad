@@ -11,9 +11,7 @@ type Props = {
 const formatDescription = (item: ActionHistory) => {
   const prefix = item.type === "RESTOCK" ? "Doplněno" : "Prodáno";
 
-  const date = `${item.date.getDate()}/${
-    item.date.getMonth() + 1
-  }/${item.date.getFullYear()}`;
+  const date = `${item.date.getDate()}/${item.date.getMonth() + 1}/${item.date.getFullYear()}`;
 
   return `${prefix} ${item.quantity} kusů dne ${date}`;
 };
@@ -28,14 +26,11 @@ export const Action = ({ item, handleDelete }: Props) => {
         </Avatar>
 
         <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">
-            {item.product.name || "Neznámý produkt"}
-          </p>
+          <p className="text-sm font-medium leading-none">{item.product.name || "Neznámý produkt"}</p>
           <p className="text-sm text-muted-foreground">
             {formatDescription(item)}
 
-            {item.type === "SOLD" &&
-              `${item.quantity} x ${item.product.price} Kč`}
+            {item.type === "SOLD" && `${item.quantity} x ${item.product.price} Kč`}
           </p>
         </div>
       </div>
@@ -44,11 +39,7 @@ export const Action = ({ item, handleDelete }: Props) => {
         <div className="ml-auto flex flex-row gap-2 font-medium">
           {item.type === "SOLD" && (
             <span className="text-md">
-              {(
-                Number((item as any).price ?? item.product.price) *
-                item.quantity
-              ).toFixed(2)}{" "}
-              Kč
+              {(Number((item as any).price ?? item.product.price) * item.quantity).toFixed(2)} Kč
             </span>
           )}
 

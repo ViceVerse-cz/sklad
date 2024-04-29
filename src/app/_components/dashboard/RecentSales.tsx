@@ -75,17 +75,10 @@ export function RecentSales() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-row gap-2">
-        <DateRangePicker
-          value={dateRange}
-          placeholder="Filtrovat podle data"
-          onValueChange={onDateChange}
-        />
+        <DateRangePicker value={dateRange} placeholder="Filtrovat podle data" onValueChange={onDateChange} />
       </div>
 
-      <div
-        ref={scrollableContainer}
-        className="h-[250px] space-y-8 overflow-y-auto"
-      >
+      <div ref={scrollableContainer} className="h-[250px] space-y-8 overflow-y-auto">
         <SalesEntry onRefetch={onRefetchActions} actions={actions} />
       </div>
 

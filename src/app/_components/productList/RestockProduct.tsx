@@ -40,12 +40,7 @@ export const RestockProduct = ({ productId, open, onClose }: Props) => {
 
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label htmlFor="picture">Počet</Label>
-          <Input
-            onChange={(e) => setCount(Number(e.target.value))}
-            value={count}
-            id="picture"
-            type="number"
-          />
+          <Input onChange={(e) => setCount(Number(e.target.value))} value={count} id="picture" type="number" />
         </div>
 
         <Button onClick={onRestock} className="w-fit" disabled={isLoading}>

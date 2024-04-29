@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { RecentSales } from "../_components/dashboard/RecentSales";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Stats } from "../_components/dashboard/Stats";

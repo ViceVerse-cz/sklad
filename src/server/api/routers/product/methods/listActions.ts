@@ -6,27 +6,25 @@ import { Visibility } from "@prisma/client";
 
 const paginate = createPaginator({ perPage: 7 });
 
-export const listActions = protectedProcedure
-  .input(listActionsInput)
-  .query(async ({ input }) => {
-    return paginate(
-      db.actionHistory,
-      {
-        orderBy: {
-          date: "desc",
-        },
-        where: {
-          productId: input.productId,
-          visibility: Visibility.Visible,
-          date: {
-            gte: input.dateRange?.from,
-            lte: input.dateRange?.to,
-          },
-        },
-        include: {
-          product: true,
+export const listActions = protectedProcedure.input(listActionsInput).query(async ({ input }) => {
+  return paginate(
+    db.actionHistory,
+    {
+      orderBy: {
+        date: "desc",
+      },
+      where: {
+        productId: input.productId,
+        visibility: Visibility.Visible,
+        date: {
+          gte: input.dateRange?.from,
+          lte: input.dateRange?.to,
         },
       },
-      { page: input.page, perPage: 5 },
-    );
-  });
+      include: {
+        product: true,
+      },
+    },
+    { page: input.page, perPage: 5 },
+  );
+});

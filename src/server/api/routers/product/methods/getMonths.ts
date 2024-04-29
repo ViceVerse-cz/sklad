@@ -8,9 +8,7 @@ export const getMonthlySales = protectedProcedure.query(async () => {
   const currentDate = new Date();
   const startDate = subMonths(currentDate, 11);
 
-  const monthlySales = await db.$queryRaw<
-    Array<{ month: Date; totalsales: Prisma.Decimal }>
-  >`
+  const monthlySales = await db.$queryRaw<Array<{ month: Date; totalsales: Prisma.Decimal }>>`
     SELECT
       date_trunc('month', "date") AS month,
       SUM(CASE WHEN ah.type = 'SOLD' THEN ah.price * ah.quantity ELSE -ah.price * ah.quantity END) AS totalSales
@@ -26,7 +24,8 @@ export const getMonthlySales = protectedProcedure.query(async () => {
 
   while (currentMonth <= currentDate) {
     const salesData = monthlySales.find(
-      (sale) => sale.month.getMonth() === currentMonth.getMonth() && sale.month.getFullYear() === currentMonth.getFullYear()
+      (sale) =>
+        sale.month.getMonth() === currentMonth.getMonth() && sale.month.getFullYear() === currentMonth.getFullYear(),
     );
     const totalSales = salesData ? salesData.totalsales : new Decimal(0);
 

@@ -22,29 +22,27 @@ type NewCategory = {
 export const CreateCategoryDialog = ({ open, onClose, onSuccess }: Props) => {
   const { toast } = useToast();
 
-  const { mutateAsync: createCategory } =
-    api.category.createCategory.useMutation({
-      onSuccess: (data: Category) => {
-        toast({
-          title: "Kategorie vytvořena",
-          description: "Kategorie byla úspěšně vytvořena.",
-          action: (
-            <ToastAction
-              onClick={() => {
-                window.location.href = "/categories/" + data.id;
-              }}
-              altText="Přejít na kategorii"
-            >
-              Přejít na kategorii
-            </ToastAction>
-          ),
-        });
-      },
-    });
-  const { data: products, isLoading: productsLoading } =
-    api.product.listAll.useQuery({
-      notShowAssociatedCategoryId: 0,
-    });
+  const { mutateAsync: createCategory } = api.category.createCategory.useMutation({
+    onSuccess: (data: Category) => {
+      toast({
+        title: "Kategorie vytvořena",
+        description: "Kategorie byla úspěšně vytvořena.",
+        action: (
+          <ToastAction
+            onClick={() => {
+              window.location.href = "/categories/" + data.id;
+            }}
+            altText="Přejít na kategorii"
+          >
+            Přejít na kategorii
+          </ToastAction>
+        ),
+      });
+    },
+  });
+  const { data: products, isLoading: productsLoading } = api.product.listAll.useQuery({
+    notShowAssociatedCategoryId: 0,
+  });
 
   const [newData, setNewData] = useState<NewCategory>({
     name: "Nová kategorie",
@@ -111,12 +109,7 @@ export const CreateCategoryDialog = ({ open, onClose, onSuccess }: Props) => {
         </div>
 
         <div className="mx-auto mr-0 flex w-fit flex-row gap-2">
-          <Button
-            type="submit"
-            onClick={onCategoryCreate}
-            className="w-fit"
-            variant="default"
-          >
+          <Button type="submit" onClick={onCategoryCreate} className="w-fit" variant="default">
             Vytvořit
           </Button>
           <Button onClick={onClose} variant="outline">

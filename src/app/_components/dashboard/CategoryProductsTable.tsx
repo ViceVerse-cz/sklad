@@ -1,24 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  RxDownload,
-  RxPencil2,
-  RxReload,
-  RxUpload,
-  RxTrash,
-  RxCalendar,
-} from "react-icons/rx";
+import { RxDownload, RxPencil2, RxReload, RxUpload, RxTrash, RxCalendar } from "react-icons/rx";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useState } from "react";
 import { api } from "@/trpc/react";
 import { Product } from "@prisma/client";
@@ -41,17 +26,11 @@ type Props = {
   onSetEditingProduct: (product: Product) => void;
 };
 
-export const CategoryProductsTable = ({
-  data,
-  onRefetch,
-  onSetEditingProduct,
-}: Props) => {
+export const CategoryProductsTable = ({ data, onRefetch, onSetEditingProduct }: Props) => {
   const [restock, setRestock] = useState(false);
   const [stock, setStock] = useState(false);
   const [productId, setProductId] = useState<number | undefined>();
-  const [historyProductId, setHistoryProductId] = useState<
-    number | undefined
-  >();
+  const [historyProductId, setHistoryProductId] = useState<number | undefined>();
 
   const [warningOpen, setWarningOpen] = useState(false);
   const [deleteProductId, setDeleteProductId] = useState<number | undefined>();
@@ -67,8 +46,7 @@ export const CategoryProductsTable = ({
   };
   const isSelectedId = (id: number) => selectedIds.includes(id);
 
-  const { mutateAsync: deleteManyProducts, isLoading } =
-    api.product.deleteMany.useMutation();
+  const { mutateAsync: deleteManyProducts, isLoading } = api.product.deleteMany.useMutation();
   const { mutateAsync: deleteProduct } = api.product.delete.useMutation();
   const onDeleteSelected = async () => {
     await deleteManyProducts(selectedIds);
@@ -176,10 +154,7 @@ export const CategoryProductsTable = ({
         </TableBody>
       </Table>
 
-      <ProductHistoryDialog
-        productId={historyProductId}
-        onClose={() => setHistoryProductId(undefined)}
-      />
+      <ProductHistoryDialog productId={historyProductId} onClose={() => setHistoryProductId(undefined)} />
       <RestockProduct
         productId={productId}
         open={restock}
@@ -189,9 +164,7 @@ export const CategoryProductsTable = ({
         }}
       />
       <StockProduct
-        actualQuantity={
-          data?.products.find((el) => el.id === productId)?.quantity ?? 0
-        }
+        actualQuantity={data?.products.find((el) => el.id === productId)?.quantity ?? 0}
         productId={productId}
         open={stock}
         onClose={() => {

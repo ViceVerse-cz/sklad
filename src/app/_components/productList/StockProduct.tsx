@@ -13,12 +13,7 @@ type Props = {
   onClose: VoidFunction;
 };
 
-export const StockProduct = ({
-  productId,
-  open,
-  actualQuantity,
-  onClose,
-}: Props) => {
+export const StockProduct = ({ productId, open, actualQuantity, onClose }: Props) => {
   const { mutateAsync, isLoading } = api.product.stock.useMutation();
 
   const [count, setCount] = useState(0);
@@ -49,17 +44,11 @@ export const StockProduct = ({
           <Label htmlFor="picture">Počet</Label>
           {actualQuantity - count < 0 && (
             <p className="flex flex-row gap-2 text-red-500">
-              <CiWarning size={23} color="red" className="text-red-500" /> Počet
-              produktů na skladu bude v mínusu
+              <CiWarning size={23} color="red" className="text-red-500" /> Počet produktů na skladu bude v mínusu
             </p>
           )}
 
-          <Input
-            onChange={(e) => setCount(Number(e.target.value))}
-            value={count}
-            id="picture"
-            type="number"
-          />
+          <Input onChange={(e) => setCount(Number(e.target.value))} value={count} id="picture" type="number" />
         </div>
 
         <Button onClick={onSell} className="w-fit" disabled={isLoading}>

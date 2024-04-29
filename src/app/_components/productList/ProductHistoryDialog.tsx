@@ -13,11 +13,7 @@ type Props = {
   dateRange: DateRange | undefined;
 };
 
-export const ProductHistoryDialog = ({
-  productId,
-  onClose,
-  dateRange,
-}: Props) => {
+export const ProductHistoryDialog = ({ productId, onClose, dateRange }: Props) => {
   const scrollableContainer = useRef<HTMLDivElement>(null);
 
   const [page, setPage] = useState(1);
@@ -67,9 +63,7 @@ export const ProductHistoryDialog = ({
   const handleDeleteAction = async (action: ActionHistory) => {
     await deleteAction(action.id);
 
-    setActions((prevActions) =>
-      prevActions.filter((item) => item.id !== action.id),
-    );
+    setActions((prevActions) => prevActions.filter((item) => item.id !== action.id));
   };
 
   return (
@@ -80,21 +74,13 @@ export const ProductHistoryDialog = ({
         <div ref={scrollableContainer} className="h-80 overflow-scroll">
           <div className="mt-7 flex flex-col gap-7 overflow-scroll">
             {actions.map((item) => (
-              <Action
-                handleDelete={handleDeleteAction}
-                item={item as ActionHistory}
-              />
+              <Action handleDelete={handleDeleteAction} item={item as ActionHistory} />
             ))}
           </div>
         </div>
 
         {data?.meta.next && (
-          <Button
-            className="mt-4 w-fit"
-            type="button"
-            onClick={increasePage}
-            disabled={actionsLoading}
-          >
+          <Button className="mt-4 w-fit" type="button" onClick={increasePage} disabled={actionsLoading}>
             {actionsLoading ? "Načítám..." : "Načíst další"}
           </Button>
         )}

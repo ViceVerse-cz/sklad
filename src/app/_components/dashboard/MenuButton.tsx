@@ -22,10 +22,7 @@ export const MenuButton = ({ item, deleteCategory }: MenuButtonProps) => {
     }
   };
 
-  const handleDeleteCategory = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    id: number,
-  ) => {
+  const handleDeleteCategory = (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
     e.stopPropagation();
     e.preventDefault();
     deleteCategory(id);
@@ -41,19 +38,10 @@ export const MenuButton = ({ item, deleteCategory }: MenuButtonProps) => {
 
   return (
     <div className="relative">
-      <RxDotsHorizontal
-        className="h-8 w-8 rounded-full p-2 transition-all hover:bg-slate-200"
-        onClick={toggleMenu}
-      />
+      <RxDotsHorizontal className="h-8 w-8 rounded-full p-2 transition-all hover:bg-slate-200" onClick={toggleMenu} />
       {isOpen && (
-        <div
-          ref={menuRef}
-          className="absolute right-0 z-50 mt-2 rounded-md bg-white shadow-lg"
-        >
-          <button
-            type="button"
-            className="block w-full rounded-t-md px-4 py-2 text-left hover:bg-gray-100"
-          >
+        <div ref={menuRef} className="absolute right-0 z-50 mt-2 rounded-md bg-white shadow-lg">
+          <button type="button" className="block w-full rounded-t-md px-4 py-2 text-left hover:bg-gray-100">
             Přejmenovat
           </button>
           <button

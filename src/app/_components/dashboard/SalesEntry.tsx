@@ -55,9 +55,7 @@ export function SalesEntry({
   };
 
   const { mutate: deleteAction } = api.product.deleteAction.useMutation();
-  const [deletingAction, setDeletingAction] = useState<ActionHistory | null>(
-    null,
-  );
+  const [deletingAction, setDeletingAction] = useState<ActionHistory | null>(null);
   const handleDeleteOpen = (action: ActionHistory) => {
     setDeletingAction(action);
     toggleWarningOpen();

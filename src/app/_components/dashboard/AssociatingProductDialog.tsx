@@ -12,12 +12,7 @@ type Props = {
   onSuccess: VoidFunction;
 };
 
-export const AssociatingProductDialog = ({
-  categoryId,
-  product,
-  onClose,
-  onSuccess,
-}: Props) => {
+export const AssociatingProductDialog = ({ categoryId, product, onClose, onSuccess }: Props) => {
   const {
     data: products,
     isLoading: productsLoading,
@@ -25,8 +20,7 @@ export const AssociatingProductDialog = ({
   } = api.product.listAll.useQuery({
     notShowAssociatedCategoryId: categoryId,
   });
-  const { mutateAsync: associateProducts } =
-    api.category.associateProducts.useMutation();
+  const { mutateAsync: associateProducts } = api.category.associateProducts.useMutation();
 
   const [selectedProducts, setSelectedProducts] = useState<string[]>();
 
@@ -61,9 +55,7 @@ export const AssociatingProductDialog = ({
           }))}
           onChange={(selected) => {
             setSelectedProducts(
-              (selected as unknown as { label: string; value: string }[]).map(
-                (product) => product.value,
-              ),
+              (selected as unknown as { label: string; value: string }[]).map((product) => product.value),
             );
           }}
           isLoading={productsLoading}

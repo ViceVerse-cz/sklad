@@ -42,11 +42,7 @@ export const AddProductDialog = ({
           type="number"
           label="Počet"
         />
-        <Input
-          onChange={(e) => onAddProduct("description", String(e.target.value))}
-          type="text"
-          label="Popis"
-        />
+        <Input onChange={(e) => onAddProduct("description", String(e.target.value))} type="text" label="Popis" />
         <div className="flex flex-row gap-2">
           <Button variant="destructive" onClick={() => onOpenChange(false)}>
             Zrušit

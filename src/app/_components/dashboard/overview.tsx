@@ -1,13 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { api } from "@/trpc/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -22,27 +16,19 @@ import { useToast } from "@/components/ui/use-toast";
 export const Overview = () => {
   const { toast } = useToast();
 
-  const { data, refetch: refetchCategories } =
-    api.category.listCategories.useQuery();
+  const { data, refetch: refetchCategories } = api.category.listCategories.useQuery();
 
   const deleteCategoryMutation = api.category.deleteCategories.useMutation({
     onSuccess: () => refetchCategories(),
   });
-  const [deletingCategoryId, setDeletingCategoryId] = useState<
-    number | undefined
-  >();
+  const [deletingCategoryId, setDeletingCategoryId] = useState<number | undefined>();
 
   const [createCategoryOpen, setCreateCategoryOpen] = useState(false);
   const toggleCreateCategoryOpen = () => setCreateCategoryOpen((prev) => !prev);
 
   const [createProductOpen, setProductOpen] = useState(false);
-  const [createProduct, setCreateProduct] = useState<Product | undefined>(
-    undefined,
-  );
-  const changeProduct = (
-    field: Exclude<keyof Product, "id">,
-    value: string | number,
-  ) => {
+  const [createProduct, setCreateProduct] = useState<Product | undefined>(undefined);
+  const changeProduct = (field: Exclude<keyof Product, "id">, value: string | number) => {
     setCreateProduct((prev) => {
       if (!prev) {
         return {
@@ -76,19 +62,11 @@ export const Overview = () => {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-row gap-3">
-        <Button
-          onClick={toggleCreateCategoryOpen}
-          className="w-fit"
-          variant="default"
-        >
+        <Button onClick={toggleCreateCategoryOpen} className="w-fit" variant="default">
           Přidat kategorii
         </Button>
 
-        <Button
-          onClick={toggleCreateProductOpen}
-          className="w-fit"
-          variant="default"
-        >
+        <Button onClick={toggleCreateProductOpen} className="w-fit" variant="default">
           Přidat produkt
         </Button>
       </div>
@@ -112,19 +90,12 @@ export const Overview = () => {
               <Link href={`categories/${item.id}`}>
                 <Card className="hover:cursor-pointer hover:bg-gray-50">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Kategorie
-                    </CardTitle>
-                    <MenuButton
-                      item={item}
-                      deleteCategory={setDeletingCategoryId}
-                    />
+                    <CardTitle className="text-sm font-medium">Kategorie</CardTitle>
+                    <MenuButton item={item} deleteCategory={setDeletingCategoryId} />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">{item.name}</div>
-                    <p className="text-xs text-muted-foreground">
-                      Počet produktů: {item.productCount}
-                    </p>
+                    <p className="text-xs text-muted-foreground">Počet produktů: {item.productCount}</p>
                   </CardContent>
                 </Card>
               </Link>

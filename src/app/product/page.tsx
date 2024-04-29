@@ -5,9 +5,7 @@ export default async ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="space-y-8">
-      <h1 className="mt-3 text-4xl font-bold">
-        Kategorie {category.category?.name}
-      </h1>
+      <h1 className="mt-3 text-4xl font-bold">Kategorie {category.category?.name}</h1>
 
       {/** TODO: MICHAL DODEALT */}
     </div>

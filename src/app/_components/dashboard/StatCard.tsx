@@ -11,13 +11,7 @@ type Props<T extends ReactNode> = {
 };
 
 export const StatCard = forwardRef(
-  <T extends ReactNode>({
-    Icon,
-    title,
-    value,
-    additionalContent,
-    onAdditionalContentClick,
-  }: Props<T>) => {
+  <T extends ReactNode>({ Icon, title, value, additionalContent, onAdditionalContentClick }: Props<T>) => {
     return (
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -27,11 +21,7 @@ export const StatCard = forwardRef(
         <CardContent>
           <div className="text-2xl font-bold">{value}</div>
           {additionalContent && (
-            <button
-              type="button"
-              onClick={onAdditionalContentClick}
-              className="mt-2.5 text-xs text-muted-foreground"
-            >
+            <button type="button" onClick={onAdditionalContentClick} className="mt-2.5 text-xs text-muted-foreground">
               {additionalContent}
             </button>
           )}

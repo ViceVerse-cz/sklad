@@ -10,22 +10,19 @@ export const listCategories = protectedProcedure.query(async () => {
         in: categories.map((category) => category.id),
       },
     },
-    include:
-    {
-      product: true
-    }
+    include: {
+      product: true,
+    },
   });
 
   return categories.map((category) => {
     const productCount = productCategories
       .filter((productCategory) => productCategory.categoryId === category.id)
-      .filter((productCategory) => productCategory.product.visibility === 'Visible')
-      .length;
+      .filter((productCategory) => productCategory.product.visibility === "Visible").length;
 
     return {
       ...category,
       productCount,
     };
   });
-
 });

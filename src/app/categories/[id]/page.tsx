@@ -35,21 +35,9 @@ export default ({ params }: { params: { id: string } }) => {
       <h1 className="text-4xl font-bold">{data?.category?.name}</h1>
 
       <div className="grid grid-cols-3 gap-6">
-        <StatCard
-          Icon={RxPencil2}
-          title="Počet produktů"
-          value={stats?.totalProductsCount}
-        />
-        <StatCard
-          Icon={CiInboxIn}
-          title="Druhy produktů"
-          value={stats?.totalProducts}
-        />
-        <StatCard
-          Icon={CiInboxOut}
-          title="Počet prodejů"
-          value={stats?.totalSold}
-        />
+        <StatCard Icon={RxPencil2} title="Počet produktů" value={stats?.totalProductsCount} />
+        <StatCard Icon={CiInboxIn} title="Druhy produktů" value={stats?.totalProducts} />
+        <StatCard Icon={CiInboxOut} title="Počet prodejů" value={stats?.totalSold} />
       </div>
 
       <div className="space-x-6">

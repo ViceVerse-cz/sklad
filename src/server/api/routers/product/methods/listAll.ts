@@ -3,69 +3,61 @@ import { db } from "@/server/db";
 import { ProductCategory, Visibility } from "@prisma/client";
 import { listAllProductsSchema } from "../schema";
 
-export const listAll = protectedProcedure
-  .input(listAllProductsSchema)
-  .query(async ({ input }) => {
-    const products = await db.product.findMany({
-      where: { visibility: Visibility.Visible },
-    });
+export const listAll = protectedProcedure.input(listAllProductsSchema).query(async ({ input }) => {
+  const products = await db.product.findMany({
+    where: { visibility: Visibility.Visible },
+  });
 
-    const actions = await db.actionHistory.findMany({
+  const actions = await db.actionHistory.findMany({
+    where: {
+      productId: {
+        in: products.map((product) => product.id),
+      },
+      date: {
+        lte: input.dateRange?.to,
+        gte: input.dateRange?.from,
+      },
+      visibility: Visibility.Visible,
+    },
+  });
+
+  let productCategories: ProductCategory[] | undefined;
+
+  if (input.notShowAssociatedCategoryId) {
+    productCategories = await db.productCategory.findMany({
       where: {
         productId: {
           in: products.map((product) => product.id),
         },
-        date: {
-          lte: input.dateRange?.to,
-          gte: input.dateRange?.from,
-        },
-        visibility: Visibility.Visible,
+        categoryId: input.notShowAssociatedCategoryId,
       },
     });
+  }
 
-    let productCategories: ProductCategory[] | undefined;
+  return products
+    .map((product) => {
+      const productActions = actions.filter(
+        (action) => action.productId === product.id && action.type === "SOLD" && action.visibility === "Visible",
+      );
 
-    if (input.notShowAssociatedCategoryId) {
-      productCategories = await db.productCategory.findMany({
-        where: {
-          productId: {
-            in: products.map((product) => product.id),
-          },
-          categoryId: input.notShowAssociatedCategoryId,
-        },
-      });
-    }
+      const soldCount = productActions.reduce((acc, action) => acc + action.quantity, 0);
 
-    return products
-      .map((product) => {
-        const productActions = actions.filter(
-          (action) => action.productId === product.id && action.type === "SOLD" && action.visibility === "Visible",
-        );
-        
-        const soldCount = productActions.reduce(
-          (acc, action) => acc + action.quantity,
-          0,
-        );
+      const soldPrice = productActions.reduce(
+        (acc, action) => acc + action.quantity * Number(action.price ?? product.price),
+        0,
+      );
 
-        const soldPrice = productActions.reduce(
-          (acc, action) =>
-            acc + action.quantity * Number(action.price ?? product.price),
-          0,
-        );
+      return {
+        ...product,
+        soldCount,
+        soldPrice,
+      };
+    })
+    .filter((product) => {
+      if (!productCategories) {
+        return true;
+      }
 
-        return {
-          ...product,
-          soldCount,
-          soldPrice,
-        };
-      })
-      .filter((product) => {
-        if (!productCategories) {
-          return true;
-        }
-
-        return !productCategories.some(
-          (productCategory) => productCategory.productId === product.id,
-        );
-      });
-  });
+      return !productCategories.some((productCategory) => productCategory.productId === product.id);
+    });
+});
