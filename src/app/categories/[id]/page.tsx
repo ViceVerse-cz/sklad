@@ -63,6 +63,7 @@ export default ({ params }: { params: { id: string } }) => {
       />
 
       <EditProductDialog
+        onDeleteProduct={() => {}} // TODO
         open={!!editingProduct}
         onOpenChange={(open) => (!open ? setEditingProduct(undefined) : open)}
         editingProduct={editingProduct}
